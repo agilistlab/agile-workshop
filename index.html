@@ -1,0 +1,2190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agile Learning Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'PT Root UI', sans-serif;
+    background: #F8F7F6;
+    color: #2C2C34;
+    min-height: 100vh;
+    padding: 60px 16px 60px;
+  }
+
+  .page-header {
+    max-width: 960px;
+    margin: 0 auto 40px;
+    text-align: center;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2C2C34;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .page-header p {
+    font-size: 0.95rem;
+    color: #576475;
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Role tabs */
+  .role-nav {
+    max-width: 960px;
+    margin: 0 auto 32px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-divider {
+    width: 1px;
+    height: 22px;
+    background: #E1DFDB;
+  }
+
+  .filter-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    color: #576475;
+    white-space: nowrap;
+  }
+
+  .filter-check input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #0FB6DF;
+    cursor: pointer;
+  }
+
+  @media(min-width:900px){
+    .role-nav { justify-content: flex-start; }
+    .checked-only-wrap { margin-left: auto; }
+  }
+
+  .role-btn {
+    padding: 8px 20px;
+    border: 1.5px solid #E1DFDB;
+    border-radius: 5px;
+    background: #fff;
+    color: #576475;
+    font-family: 'PT Root UI', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .role-btn:hover { border-color: #0FB6DF; color: #0FB6DF; }
+  .role-btn.active { background: #002855; border-color: #002855; color: #fff; }
+
+  /* Progress bar */
+  .progress-wrap {
+    max-width: 960px;
+    margin: 0 auto 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: #E1DFDB;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0FB6DF, #002855);
+    border-radius: 3px;
+    transition: width 0.4s;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 0.82rem;
+    color: #576475;
+    white-space: nowrap;
+    min-width: 80px;
+    text-align: right;
+  }
+
+  /* Floating progress header — full-width top bar, centred */
+  .float-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    z-index: 1000;
+    background: #fff;
+    border: none;
+    border-bottom: 1px solid #E1DFDB;
+    border-radius: 0;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .ring-wrap { position: relative; width: 44px; height: 44px; flex-shrink: 0; }
+  .ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg   { fill: none; stroke: #E1DFDB; stroke-width: 4; }
+  .ring-fill {
+    fill: none;
+    stroke: url(#ringGrad);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 113;
+    stroke-dashoffset: 113;
+    transition: stroke-dashoffset 0.5s ease;
+  }
+  .ring-pct {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #002855;
+  }
+  .float-meta { display: flex; flex-direction: column; gap: 2px; }
+  .float-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #576475;
+    white-space: nowrap;
+  }
+  .float-count {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #2C2C34;
+    white-space: nowrap;
+  }
+  .float-count span { color: #0FB6DF; }
+  @media(max-width:480px) {
+    .float-header { padding: 6px 14px; gap: 10px; }
+    .ring-wrap { width: 32px; height: 32px; }
+    .ring-pct { font-size: 0.6rem; }
+    .float-title { display: none; }
+  }
+
+  /* Tier sections */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .tier {
+    background: #fff;
+    border: 1px solid #E1DFDB;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .tier-header {
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid #E1DFDB;
+  }
+
+  .tier-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .tier-fundamentals .tier-badge { background: #002855; color: #fff; }
+  .tier-experienced .tier-badge  { background: #576475; color: #fff; }
+  .tier-expert .tier-badge        { background: #4B4439; color: #fff; }
+
+  .tier-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #2C2C34;
+    flex: 1;
+  }
+
+  .tier-subtitle {
+    font-size: 0.82rem;
+    color: #576475;
+    display: none;
+  }
+
+  @media(min-width:600px){ .tier-subtitle { display: block; } }
+
+  .tier-toggle {
+    font-size: 1.1rem;
+    color: #576475;
+    transition: transform 0.2s;
+  }
+
+  .tier-toggle.open { transform: rotate(180deg); }
+
+  .tier-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  @media(min-width:700px){
+    .tier-body { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media(min-width:960px){
+    .tier-body { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .tier-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  /* Category group */
+  .cat-group {
+    padding: 18px 22px;
+    border: 1px solid #E1DFDB;
+    margin: 0;
+    width: 100%;
+    background: #fff;
+  }
+
+  .cat-group:last-child { border-right: 1px solid #E1DFDB; }
+
+  .cat-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #0FB6DF;
+    margin-bottom: 12px;
+  }
+
+  /* Checklist items */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px solid #F8F7F6;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-radius: 3px;
+    padding-left: 2px;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: #F8F7F6; }
+
+  .check-item input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: #0FB6DF;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .check-item label {
+    font-size: 0.875rem;
+    color: #2C2C34;
+    line-height: 1.45;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .check-item.done label {
+    text-decoration: line-through;
+    color: #576475;
+  }
+
+  .tag {
+    font-size: 0.68rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .tag-sm  { background: #e8f7fc; color: #0FB6DF; }
+  .tag-po  { background: #e8ecf5; color: #002855; }
+  .tag-dev { background: #eef0f3; color: #576475; }
+  .tag-all { background: #f0ede9; color: #4B4439; }
+
+  /* Hidden role filter */
+  .check-item[data-roles] { display: none; }
+  .check-item.role-visible { display: flex; }
+
+  /* Reset btn */
+  .reset-wrap {
+    max-width: 960px;
+    margin: 24px auto 0;
+    text-align: right;
+  }
+
+  .reset-btn {
+    font-family: 'PT Root UI', sans-serif;
+    font-size: 0.82rem;
+    color: #576475;
+    background: none;
+    border: 1px solid #E1DFDB;
+    border-radius: 5px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .reset-btn:hover { border-color: #4B4439; color: #4B4439; }
+
+  /* Legend */
+  .legend {
+    max-width: 960px;
+    margin: 28px auto 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #576475;
+  }
+
+  .legend span { font-weight: 600; color: #2C2C34; }
+
+  /* ── Timeline panel ── */
+  .timeline-panel {
+    max-width: 960px;
+    margin: 0 auto 28px;
+    background: #fff;
+    border: 1px solid #E1DFDB;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .timeline-toggle-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 22px;
+    background: #002855;
+    border: none;
+    cursor: pointer;
+    font-family: 'PT Root UI', sans-serif;
+    text-align: left;
+    border-bottom: 1px solid #E1DFDB;
+    transition: background 0.15s;
+  }
+  .timeline-toggle-btn:hover { background: #0a3060; }
+
+  .tl-toggle-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    flex: 1;
+  }
+
+  .tl-toggle-sub {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .tl-toggle-icon {
+    font-size: 1rem;
+    color: #0FB6DF;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .tl-toggle-icon.open { transform: rotate(180deg); }
+
+  .timeline-body {
+    display: none;
+    padding: 24px 24px 20px;
+  }
+  .timeline-body.open { display: block; }
+
+  /* Countdown strip */
+  .tl-countdown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: #002855;
+    border-radius: 5px;
+    padding: 14px 16px;
+    margin-bottom: 24px;
+  }
+
+  .tl-cd-left { flex: 1; min-width: 160px; }
+  .tl-cd-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0FB6DF;
+    margin-bottom: 3px;
+  }
+  .tl-cd-target { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+
+  .tl-cd-digits {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .tl-digit { text-align: center; }
+  .tl-digit .n {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    min-width: 36px;
+  }
+  @media (min-width: 480px) {
+    .tl-digit .n { font-size: 1.8rem; min-width: 48px; }
+  }
+  .tl-digit .u {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.35);
+    margin-top: 2px;
+  }
+  .tl-sep { font-size: 1.4rem; font-weight: 700; color: rgba(255,255,255,0.2); padding-bottom: 4px; }
+
+  .tl-cd-pct {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.45);
+    text-align: right;
+  }
+  .tl-cd-pct strong { display: block; font-size: 1.5rem; font-weight: 700; color: #0FB6DF; line-height: 1; }
+
+  /* Bar chart area */
+  .tl-chart { margin-bottom: 8px; }
+
+  .tl-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  @media (min-width: 400px) { .tl-row { gap: 10px; } }
+
+  .tl-role-label {
+    width: 32px;
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #576475;
+    text-align: right;
+  }
+  @media (min-width: 400px) {
+    .tl-role-label { width: 52px; font-size: 0.68rem; }
+  }
+
+  .tl-track-wrap {
+    flex: 1;
+    position: relative;
+  }
+
+  /* month ruler above each row */
+  .tl-ruler {
+    display: flex;
+    margin-bottom: 3px;
+    padding-left: 0;
+  }
+  .tl-ruler-tick {
+    flex: 1;
+    font-size: 0.55rem;
+    color: #CBD5E0;
+    text-align: center;
+  }
+  /* hide ruler on mobile entirely */
+  .tl-ruler { display: none; }
+  @media (min-width: 400px) { .tl-ruler { display: flex; } }
+  /* show only every 3rd tick label on small screens */
+  .tl-ruler-tick:not(:nth-child(3n)) { color: transparent; }
+  @media (min-width: 560px) {
+    .tl-ruler-tick:not(:nth-child(3n)) { color: #CBD5E0; }
+    .tl-ruler-tick:not(:nth-child(6n)) { color: transparent; }
+  }
+  @media (min-width: 560px) {
+    .tl-track { height: 22px; }
+  }
+
+  .tl-track {
+    height: 20px;
+    background: #F2F4F7;
+    border-radius: 4px;
+    display: flex;
+    position: relative;
+    overflow: visible;
+  }
+
+  /* segment */
+  .tl-seg {
+    height: 100%;
+    border-radius: 0;
+    position: relative;
+    transition: opacity 0.15s;
+  }
+  .tl-seg:first-child { border-radius: 4px 0 0 4px; }
+  .tl-seg:last-child  { border-radius: 0 4px 4px 0; }
+  .tl-seg:only-child  { border-radius: 4px; }
+
+  .seg-fund-c  { background: #002855; }
+  .seg-exp-c   { background: #576475; }
+  .seg-xp-c    { background: #4B4439; }
+  .seg-gap-c   { background: #E1DFDB; }
+
+  /* checklist-driven fill overlay */
+  .tl-seg-fill {
+    position: absolute;
+    inset: 0;
+    background: rgba(15,182,223,0.22);
+    width: 0%;
+    transition: width 0.5s ease;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* label — vertical inside bar on mobile, horizontal below on desktop */
+  .tl-seg-lbl {
+    position: absolute;
+    top: 4px;
+    font-size: 0.52rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+    white-space: nowrap;
+    pointer-events: none;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    line-height: 1;
+    max-height: calc(100% - 6px);
+    overflow: hidden;
+    padding-left: 2px;
+  }
+
+  @media (min-width: 560px) {
+    .tl-seg-lbl {
+      writing-mode: horizontal-tb;
+      text-orientation: mixed;
+      transform: none;
+      top: auto;
+      bottom: -18px;
+      font-size: 0.58rem;
+      color: #576475;
+      padding-left: 0;
+      max-height: none;
+      overflow: visible;
+    }
+  }
+
+  /* today line */
+  .tl-today {
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    width: 2px;
+    background: #0FB6DF;
+    border-radius: 1px;
+    z-index: 4;
+  }
+  .tl-today::after {
+    content: 'NOW';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #0FB6DF;
+  }
+
+  /* grid lines inside track */
+  .tl-track::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      90deg, transparent,
+      transparent calc(100%/24 - 1px),
+      rgba(255,255,255,0.15) calc(100%/24 - 1px),
+      rgba(255,255,255,0.15) calc(100%/24)
+    );
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  /* tier progress bars inside timeline */
+  .tl-tier-progress {
+    margin-top: 16px;
+    border-top: 1px solid #E1DFDB;
+    padding-top: 16px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .tl-tp-item {
+    flex: 1;
+    min-width: 140px;
+  }
+  .tl-tp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .tl-tp-name {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #576475;
+  }
+  .tl-tp-pct {
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+  .tl-tp-bar-bg {
+    height: 5px;
+    background: #E1DFDB;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .tl-tp-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s;
+    width: 0%;
+  }
+
+  /* tl-lbl-wrap — no longer used */
+  .tl-lbl-wrap { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Floating progress widget -->
+<div class="float-header">
+  <div class="ring-wrap">
+    <svg width="44" height="44" viewBox="0 0 44 44">
+      <defs>
+        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#0FB6DF"/>
+          <stop offset="100%" stop-color="#002855"/>
+        </linearGradient>
+      </defs>
+      <circle class="ring-bg"   cx="22" cy="22" r="18"/>
+      <circle class="ring-fill" cx="22" cy="22" r="18" id="ringFill"/>
+    </svg>
+    <div class="ring-pct" id="floatPct">0%</div>
+  </div>
+  <div class="float-meta">
+    <div class="float-title">Progress</div>
+    <div class="float-count"><span id="floatChecked">0</span> / <span id="floatTotal">0</span> completed</div>
+  </div>
+</div>
+
+<div class="page-header">
+  <h1>Agile Learning Checklist</h1>
+  <p>A role-by-role learning path grounded in the Scrum Guide 2020, SAFe 6.0, the Agile Manifesto, Kanban, and agile metrics. Check items as your team progresses.</p>
+</div>
+
+<!-- ── COLLAPSIBLE TIMELINE PANEL ── -->
+<div class="timeline-panel" style="max-width:960px;margin:0 auto 28px;">
+  <button class="timeline-toggle-btn" onclick="toggleTimeline()" id="tl-btn">
+    <span class="tl-toggle-label">📅 24-Month Learning Timeline</span>
+    <span class="tl-toggle-sub">Mar 2026 → Mar 2028 · Countdown &amp; tier progress</span>
+    <span class="tl-toggle-icon" id="tl-icon">▾</span>
+  </button>
+
+  <div class="timeline-body" id="tl-body">
+
+    <!-- Countdown — centred -->
+    <div class="tl-countdown" style="flex-direction:column;align-items:center;text-align:center;gap:10px;">
+      <div>
+        <div class="tl-cd-label" style="margin-bottom:2px;">Countdown to Target · 26 March 2028</div>
+        <div class="tl-cd-target"><span id="tl-elapsed-pct" style="color:#0FB6DF;font-weight:700;">0%</span> of journey elapsed</div>
+      </div>
+      <div class="tl-cd-digits" style="justify-content:center;">
+        <div class="tl-digit"><span class="n" id="tl-days">—</span><span class="u">Days</span></div>
+        <div class="tl-sep">:</div>
+        <div class="tl-digit"><span class="n" id="tl-hrs">—</span><span class="u">Hrs</span></div>
+        <div class="tl-sep">:</div>
+        <div class="tl-digit"><span class="n" id="tl-min">—</span><span class="u">Min</span></div>
+        <div class="tl-sep">:</div>
+        <div class="tl-digit"><span class="n" id="tl-sec">—</span><span class="u">Sec</span></div>
+      </div>
+    </div>
+
+    <!-- Consolidated bar chart -->
+    <div class="tl-chart">
+
+      <!-- Single shared ruler -->
+      <div style="display:flex;margin-bottom:4px;padding-left:52px;">
+        <div class="tl-ruler" id="ruler-dev" style="flex:1;display:flex;"></div>
+      </div>
+
+      <!-- Single unified bar -->
+      <div style="position:relative;">
+
+        <!-- TODAY line -->
+        <div class="tl-today" id="today-dev"></div>
+
+        <!-- One bar: Fundamentals | Experienced | Expert -->
+        <div class="tl-track" id="track-dev" style="height:32px;">
+          <div class="tl-seg seg-fund-c" style="width:16.67%" id="dev-fund">
+            <div class="tl-seg-fill" id="fill-dev-fund"></div>
+          </div>
+          <div class="tl-seg seg-exp-c" style="width:41.67%" id="dev-exp">
+            <div class="tl-seg-fill" id="fill-dev-exp"></div>
+          </div>
+          <div class="tl-seg seg-xp-c" style="width:41.66%" id="sm-xp">
+            <div class="tl-seg-fill" id="fill-sm-xp"></div>
+          </div>
+        </div>
+
+        <!-- Phase labels — spaced to avoid overlap -->
+        <div style="position:relative;height:16px;margin-top:5px;font-size:0.58rem;color:#576475;font-weight:600;">
+          <span style="position:absolute;left:0%;">Fundamentals</span>
+          <span style="position:absolute;left:20%;">Experienced</span>
+          <span style="position:absolute;left:60%;">Expert</span>
+        </div>
+
+      </div>
+
+      <!-- Role stat cards — 4 columns -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">
+
+        <!-- Team -->
+        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
+          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Team</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-team-pct">0%</div>
+          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-team">0/0</div>
+          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+            <div id="stat-team-bar" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+        <!-- Dev -->
+        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #0FB6DF;border-radius:5px;padding:10px 12px;">
+          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0FB6DF;margin-bottom:6px;">Dev</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-dev-pct">0%</div>
+          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-dev">0/0</div>
+          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+            <div id="stat-dev-bar" style="height:100%;background:#0FB6DF;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+        <!-- PO -->
+        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
+          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">PO</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-po-pct">0%</div>
+          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-po">0/0</div>
+          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+            <div id="stat-po-bar" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+        <!-- SM -->
+        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
+          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">SM</div>
+          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-sm-pct">0%</div>
+          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-sm">0/0</div>
+          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+            <div id="stat-sm-bar" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /tl-chart -->
+
+
+
+    <!-- 3-column tier cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
+
+      <!-- Fundamentals -->
+      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
+        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">Fundamentals</div>
+        <div style="font-size:1.3rem;font-weight:700;color:#002855;line-height:1;" id="tp-pct-fund">0%</div>
+        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-fund">0 / 0</div>
+        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+          <div id="tp-fill-fund" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+      <!-- Experienced -->
+      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
+        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">Experienced</div>
+        <div style="font-size:1.3rem;font-weight:700;color:#576475;line-height:1;" id="tp-pct-exp">0%</div>
+        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-exp">0 / 0</div>
+        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+          <div id="tp-fill-exp" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+      <!-- Expert -->
+      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
+        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Expert</div>
+        <div style="font-size:1.3rem;font-weight:700;color:#4B4439;line-height:1;" id="tp-pct-xp">0%</div>
+        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-xp">0 / 0</div>
+        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+          <div id="tp-fill-xp" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hidden anchors kept for JS compatibility -->
+    <span id="stat-total-checked" style="display:none;"></span>
+    <span id="stat-overall-pct"   style="display:none;"></span>
+    <span id="stat-months-left"   style="display:none;"></span>
+    <span id="stat-milestone"     style="display:none;"></span>
+
+  </div><!-- /timeline-body -->
+</div>
+
+<!-- Role filter -->
+<div class="role-nav">
+  <div class="filter-group">
+    <label class="filter-check"><input type="checkbox" id="filterTeam" onchange="updateProgress()"><span>Team</span></label>
+    <label class="filter-check"><input type="checkbox" id="filterSM" onchange="updateProgress()"><span>Scrum Master</span></label>
+    <label class="filter-check"><input type="checkbox" id="filterPO" onchange="updateProgress()"><span>Product Owner</span></label>
+    <label class="filter-check"><input type="checkbox" id="filterDev" onchange="updateProgress()"><span>Developers</span></label>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group">
+    <label class="filter-check"><input type="checkbox" id="filterFund" onchange="updateProgress()"><span>Fundamentals</span></label>
+    <label class="filter-check"><input type="checkbox" id="filterExp" onchange="updateProgress()"><span>Experienced</span></label>
+    <label class="filter-check"><input type="checkbox" id="filterXp" onchange="updateProgress()"><span>Expert</span></label>
+  </div>
+  <div class="checked-only-wrap">
+    <label class="filter-check"><input type="checkbox" id="checkedOnlyToggle" onchange="updateProgress()"><span>Checked only</span></label>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill"></div></div>
+  <div class="progress-label" id="progLabel">0 / 0</div>
+</div>
+
+<div class="container">
+
+  <!-- ──────────────── FUNDAMENTALS ──────────────── -->
+  <div class="tier tier-fundamentals" id="tier-fund">
+    <div class="tier-header" onclick="toggleTier('fund')">
+      <div class="tier-badge">Fundamentals</div>
+      <div class="tier-title">The Foundation Every Agilist Must Own</div>
+      <div class="tier-subtitle">Start here — no shortcuts. Psychological safety precedes all else.</div>
+      <div class="tier-toggle open" id="tog-fund">▾</div>
+    </div>
+    <div class="tier-body" id="body-fund">
+
+      <!-- Agile Manifesto & Values -->
+      <div class="cat-group">
+        <div class="cat-title">Agile Manifesto &amp; Values</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f1"><label for="f1">Know the 4 values of the Agile Manifesto by heart — not by rote, but by meaning</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f2"><label for="f2">Understand all 12 Agile Manifesto principles and connect each to real delivery challenges</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f3"><label for="f3">Explain why "working software over documentation" doesn't mean no documentation</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f4"><label for="f4">Recognize when the team's actions contradict the Manifesto values they claim to uphold</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Scrum Fundamentals -->
+      <div class="cat-group">
+        <div class="cat-title">Scrum Framework</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f5"><label for="f5">Name the 3 empirical pillars: Transparency, Inspection, Adaptation — and explain how they depend on each other</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f6"><label for="f6">Live the 5 Scrum Values: Commitment, Focus, Openness, Respect, Courage</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f7"><label for="f7">Understand the purpose and timebox of all 5 Scrum events</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f8"><label for="f8">Distinguish the 3 Scrum roles and their accountabilities (not job titles)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f9"><label for="f9">Know the 3 Scrum artifacts and their associated commitments (Product Goal, Sprint Goal, DoD)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f10"><label for="f10">Facilitate every Scrum event without owning the outcome — serve, don't manage</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="f11"><label for="f11">Order the Product Backlog by value, risk, and dependency — not loudest stakeholder</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f12"><label for="f12">Self-organize around the Sprint Goal — the plan is yours to create and adapt</label><span class="tag tag-dev">Dev</span>
+        </div>
+      </div>
+
+      <!-- Psychological Safety -->
+      <div class="cat-group">
+        <div class="cat-title">Psychological Safety</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f13"><label for="f13">Understand Edmondson's 1999 definition: psychological safety is belief that risk-taking won't be punished</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f14"><label for="f14">Identify the signs of a psychologically unsafe team (silenced voices, blame games, hidden impediments)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f15"><label for="f15">Actively normalise asking for help — model vulnerability in every Sprint Retrospective</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f16"><label for="f16">Promote a no-blame culture where mistakes are learning opportunities, not failure events</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f17"><label for="f17">Ensure equal speaking time in retros — imbalance is a psychological safety signal, not just a facilitation issue</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- User Stories -->
+      <div class="cat-group">
+        <div class="cat-title">User Stories &amp; Backlog</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f18"><label for="f18">Write stories using the 3 C's: Card, Conversation, Confirmation (Jeffries 2001)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f19"><label for="f19">Evaluate stories against INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable (Wake 2003)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="f20"><label for="f20">Link every story to a Feature; understand why parent context drives prioritisation</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f21"><label for="f21">Know the difference between a Definition of Ready (entry) and a Definition of Done (exit)</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Basic Metrics -->
+      <div class="cat-group">
+        <div class="cat-title">Agile Metrics — First Steps</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f22"><label for="f22">Understand Throughput: how many items the team completes per sprint</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f23"><label for="f23">Understand Cycle Time vs Lead Time — CT starts when work begins, LT starts when work is requested</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f24"><label for="f24">Calculate Sprint Predictability: Closed ÷ Final Sprint Scope (committed + mid-sprint additions)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f25"><label for="f25">Recognise that velocity is a planning tool — not a performance target or team ranking tool</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Kanban Basics -->
+      <div class="cat-group">
+        <div class="cat-title">Kanban Basics</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f26"><label for="f26">Visualise your workflow: every active work item must be visible on the board</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f27"><label for="f27">Understand WIP limits and why exceeding them creates queues — not productivity</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f28"><label for="f28">Know that WIP includes all active statuses: In Progress, In Review, In Testing, Blocked, Ready for Release</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f29"><label for="f29">Coach the team to finish items before starting new ones — "Stop Starting, Start Finishing"</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- User Stories in Practice -->
+      <div class="cat-group">
+        <div class="cat-title">User Stories in Practice</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f30"><label for="f30">Write User Stories in the format "As a [role], I want [goal], so that [value]" — the "so that" is not optional; it anchors every story to business value</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f31"><label for="f31">Understand why teams use Stories, not Tasks — Stories describe value to a user; Tasks describe technical work for the team. A backlog of tasks is a feature factory waiting to happen</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f32"><label for="f32">Split stories vertically — each story should deliver a thin, testable slice of value end-to-end, not a horizontal layer (e.g. "only the UI" or "only the database")</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f33"><label for="f33">Write Acceptance Criteria collaboratively with the team before Sprint Planning — criteria written alone by the PO after planning are not a shared understanding, they are a specification</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Definition of Ready & Done -->
+      <div class="cat-group">
+        <div class="cat-title">Definition of Ready &amp; Done</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f34"><label for="f34">Create and maintain a Definition of Ready (DoR) as a team — a story is Ready when it is small enough, understood by everyone, and has clear Acceptance Criteria before Sprint Planning begins</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f35"><label for="f35">Create and maintain a Definition of Done (DoD) as a team — Done means releasable, not "code complete". Every increment must meet the DoD before it is counted as delivered</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f36"><label for="f36">Review and update the DoD at every Retrospective — a DoD that never changes is a DoD the team has stopped believing in</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f37"><label for="f37">Use the DoR as a coaching tool, not a gate — if stories consistently fail the DoR, the problem is upstream in refinement, not at the door of Sprint Planning</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Team Agreements -->
+      <div class="cat-group">
+        <div class="cat-title">Team Agreements</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f38"><label for="f38">Facilitate a Team Agreement workshop at team formation and revisit it every PI — agreements on communication, working hours, escalation, and collaboration norms prevent the conflicts that retrospectives can't fix</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f39"><label for="f39">Make Team Agreements visible — post them on the team board or Confluence page. Agreements that exist only in people's heads are not agreements, they are assumptions</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f40"><label for="f40">Include psychological safety norms in Team Agreements explicitly — e.g. "We raise problems early", "We separate the person from the problem", "We ask for help without shame"</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Jira & Agile Metrics Tools -->
+      <div class="cat-group">
+        <div class="cat-title">Jira &amp; Agile Metrics Tools</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f41"><label for="f41">Use JQL (Jira Query Language) to filter and organise work — know at minimum: project, status, assignee, sprint, and label filters; build saved filters your team uses every daily</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f42"><label for="f42">Build and use a Great Gadgets (StonikByte) dashboard in Jira for your team — at minimum: Throughput, Cycle Time, and WIP displayed in one place and reviewed every Sprint</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="f43"><label for="f43">Use the Great Gadgets Agile Metrics Dashboard in every Sprint Review — metrics without a cadence are decoration; metrics reviewed every sprint become coaching conversations</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="f44"><label for="f44">Know how to read your team's Jira board as a flow signal — items stuck in a column for more than 2 days are not a status update problem, they are an impediment waiting to be named</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Professional Developer Skills (PSD) -->
+      <div class="cat-group">
+        <div class="cat-title">Professional Developer Skills <span style="font-weight:400;color:#576475;font-size:0.72rem;">— PSD</span></div>
+
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f45"><label for="f45">Understand your accountability as a Developer: you are responsible for creating a usable Increment every Sprint — not just writing code, but delivering done, working software</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f46"><label for="f46">Practice cross-functional self-management: the team collectively owns all the skills needed to deliver — no hand-offs, no "that's not my job"</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f47"><label for="f47">Apply continuous integration — merge code at least daily, keep the build green, and treat a broken build as the team's highest priority to fix</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f48"><label for="f48">Write automated tests as part of the Definition of Done — not as an afterthought. Tests that run manually are not a safety net, they are a debt</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f49"><label for="f49">Participate actively in Backlog Refinement — Developers bring technical insight into sizing, splitting, and dependency identification; the PO brings the value; both are needed to write a good story</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f50"><label for="f50">Understand and own the Definition of Done — you created it, you enforce it. "Done" means releasable, integrated, tested, and documented to the agreed standard</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f51"><label for="f51">Raise impediments immediately — never silently absorb a blocker for days. Surface it at the Daily Sync so the team and SM can act</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f52"><label for="f52">Manage technical debt actively — allocate at least 20% of each Sprint to refactoring and quality improvement; technical debt ignored is velocity borrowed from the future</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f53"><label for="f53">Collaborate on design and architecture — good architecture emerges from the team, not from a solo architect handing down decisions. Make design a conversation, not a document</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f54"><label for="f54">Forecast Sprint capacity honestly — commit to what the team can genuinely complete to Done, not what looks impressive. An over-committed Sprint produces undone work, not productivity</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f55"><label for="f55">Make work visible on the team board — update story status daily. A board that doesn't reflect reality is a planning tool that nobody can trust</label><span class="tag tag-dev">Dev</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="f56"><label for="f56">Know how to split a story too large for one Sprint — use SPIDR (Spike, Path, Interface, Data, Rules) or similar splitting patterns to create stories that fit and still deliver value</label><span class="tag tag-dev">Dev</span>
+        </div>
+      </div>
+
+    </div><!-- /tier-body -->
+  </div><!-- /tier-fundamentals -->
+
+
+  <!-- ──────────────── EXPERIENCED ──────────────── -->
+  <div class="tier tier-experienced" id="tier-exp">
+    <div class="tier-header" onclick="toggleTier('exp')">
+      <div class="tier-badge">Experienced</div>
+      <div class="tier-title">From Understanding to Deliberate Practice</div>
+      <div class="tier-subtitle">Patterns, metrics, and scaled agile start here.</div>
+      <div class="tier-toggle open" id="tog-exp">▾</div>
+    </div>
+    <div class="tier-body" id="body-exp">
+
+      <!-- SAFe & Scaling -->
+      <div class="cat-group">
+        <div class="cat-title">SAFe &amp; ART Execution</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e1"><label for="e1">Understand the purpose of a PI Planning event and the ART's cadence-based alignment</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e2"><label for="e2">Facilitate PI Planning for your team: sequence stories, craft PI Objectives, flag risks</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e3"><label for="e3">Contribute to the ART Vision and Roadmap; keep Team Backlog aligned with ART priorities</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e4"><label for="e4">Participate actively in ART Sync and PO Sync to surface cross-team dependencies early</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e5"><label for="e5">Know the 5 SM/TC responsibilities: PI Facilitation, Iteration Execution, Flow, High-Performing Teams, ART Performance</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e6"><label for="e6">Know the 5 PO responsibilities: Customer Connection, Vision & Roadmap, Backlog Management, Team Support, Feedback Loop</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e7"><label for="e7">Understand the Innovation & Planning (IP) Iteration and how to use it without wasting it</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Flow Metrics -->
+      <div class="cat-group">
+        <div class="cat-title">Flow Metrics (SAFe 6 Flavour)</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e8"><label for="e8">Apply Little's Law: L = λW — relate WIP, Throughput, and Lead Time in a coherent model</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e9"><label for="e9">Track all 6 SAFe Flow Metrics: Distribution, Velocity, Time, Load, Efficiency, Predictability</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e10"><label for="e10">Distinguish Flow Efficiency (active time ÷ flow time) and use it to expose wait time waste</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e11"><label for="e11">Run what-if scenarios: "If we reduce WIP by 2, what happens to Cycle Time?" — use data, not opinion</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e12"><label for="e12">Understand that Little's Law is boundary-agnostic: apply it at story, feature, or ART level by moving the system boundary</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Antipatterns -->
+      <div class="cat-group">
+        <div class="cat-title">Agile Antipatterns</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e13"><label for="e13">Identify "Output Focus" antipattern: the team ships features but ignores outcome-level feedback</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e14"><label for="e14">Detect "Mid-Sprint Scope Addition" and know how to negotiate it using Sprint Goal language</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e15"><label for="e15">Name and coach against "Shadow Sprint Backlog" — hidden work destroys transparency and inspect/adapt</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e16"><label for="e16">Recognise "No WIP Limit" as a systemic antipattern, not an individual discipline issue</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e17"><label for="e17">Use Wolpers (2024) antipattern vocabulary in retrospective coaching — name the pattern, not the person</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e18"><label for="e18">Connect Environment Lock and Dependency Drag antipatterns to cycle time degradation with data</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Retrospectives -->
+      <div class="cat-group">
+        <div class="cat-title">Retrospectives &amp; Continuous Improvement</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e19"><label for="e19">Design retrospectives that surface real issues — rotate formats, avoid comfort-zone templates</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e20"><label for="e20">Drive Kaizen: every retro must produce at least one actionable improvement with an owner and due date</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e21"><label for="e21">Intervene constructively when one or two voices dominate the retrospective — it is a safety signal</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e22"><label for="e22">Track improvement stories across sprints — a retro with no follow-up is a retro that didn't happen</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Advanced Kanban -->
+      <div class="cat-group">
+        <div class="cat-title">Kanban — Flow Thinking</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e23"><label for="e23">Read and interpret a Cumulative Flow Diagram (CFD) to spot growing queues and blocked states</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e24"><label for="e24">Construct correct JQL for WIP: status NOT IN (Closed, Done, "To Do", Backlog) — not just "In Progress"</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e25"><label for="e25">Use a Scatterplot of Cycle Time to set realistic SLA targets — percentile-based, not average-based</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e26"><label for="e26">Distinguish between SAFe Kanban Teams and Scrum Teams — know when to apply each in your ART</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Stakeholder & Transparency -->
+      <div class="cat-group">
+        <div class="cat-title">Transparency &amp; Stakeholder Collaboration</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e27"><label for="e27">Understand that transparency enables inspection — and inspection without transparency is misleading (Scrum Guide)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e28"><label for="e28">Run Sprint Reviews that generate real feedback, not demos that confirm what stakeholders already expect</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e29"><label for="e29">Address leadership-level transparency gaps: use roadmaps and Sprint Reviews to make strategy visible and connected to team work</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e30"><label for="e30">Communicate impediments upward with data and impact framing — not just status updates</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- Backlog Forensics — Wolpers 60 Questions -->
+      <div class="cat-group">
+        <div class="cat-title">Backlog Forensics <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
+
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e31"><label for="e31">Know your Product Backlog size — if it exceeds 3–4 sprints of capacity, the PO needs support in pruning it</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e32"><label for="e32">Check item age: any backlog item untouched for 5+ months is likely obsolete — challenge or delete it</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e33"><label for="e33">Know your average lead time from idea → backlog → delivery: if no one can answer this, the system is invisible</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e34"><label for="e34">Identify backlog items no current team member recognises — re-refine or delete them before they consume capacity</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="e35"><label for="e35">Ask Wolpers' onboarding diagnostic: backlog size, item age, lead time, velocity, unfinished stories — in a 60-min timebox</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e36"><label for="e36">Know your velocity for the last 3 sprints — and understand why it varies, not just what it averages</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e37"><label for="e37">Understand your typical Sprint Backlog composition: one large item, some medium, a few small — this is the productivity sweet spot</label><span class="tag tag-all">Team</span>
+        </div>
+      </div>
+
+      <!-- PO Vision Value Validation — McGreal/Jocham -->
+      <div class="cat-group">
+        <div class="cat-title">Product Discovery <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
+
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e38"><label for="e38">Own the Three Vs: Vision (transparency), Value (inspect), Validation (adapt) — these are the PO's strategic engine</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e39"><label for="e39">Articulate a clear Product Vision that the whole team can act on without direct orders — it creates autonomy, not dependency</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e40"><label for="e40">Distinguish outcome from output: a valuable sprint ships pearls (value) onto the thread (vision) — not just completed tickets</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="e41"><label for="e41">Use MVP patterns deliberately: Promotional, Mining, Landing Page, Wizard of Oz, or Single-Feature — chosen for the hypothesis being tested</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e42"><label for="e42">Allocate meaningful time to user research — less than 10% is a red flag; 50% is excellent (McGreal & Jocham)</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e43"><label for="e43">Involve developers in product discovery as early as possible — they prevent technically unviable solutions before they reach the Sprint</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="e44"><label for="e44">Guard the backlog from pet projects — the ability to say "no" with data is a core PO accountability, not a management responsibility</label><span class="tag tag-po">PO</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tier-experienced -->
+
+
+  <!-- ──────────────── EXPERT ──────────────── -->
+  <div class="tier tier-expert" id="tier-xp">
+    <div class="tier-header" onclick="toggleTier('xp')">
+      <div class="tier-badge">Expert</div>
+      <div class="tier-title">Systems Thinking &amp; Organisational Agility</div>
+      <div class="tier-subtitle">Coach beyond the team — influence the system that shapes the team.</div>
+      <div class="tier-toggle open" id="tog-xp">▾</div>
+    </div>
+    <div class="tier-body" id="body-xp">
+
+      <!-- Coaching Mastery -->
+      <div class="cat-group">
+        <div class="cat-title">Coaching &amp; Servant Leadership</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x1"><label for="x1">Coach across the full Agile Coach Stance spectrum: teacher, mentor, facilitator, coach — and know when to switch</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x2"><label for="x2">Understand the Agile Coach to Chief Agility Officer growth path — identify where you currently sit on it and name one concrete step toward the next level</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x3"><label for="x3">Distinguish high-performing team traits (Google Project Aristotle): psychological safety, dependability, structure, meaning, impact</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x4"><label for="x4">Address systemic disempowerment: when teams can't adapt, the organisation is the impediment — not the team</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x5"><label for="x5">Run effective Inspect & Adapt workshops at ART level — problem-solving, not post-mortems</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Probabilistic Forecasting -->
+      <div class="cat-group">
+        <div class="cat-title">Probabilistic Forecasting</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x6"><label for="x6">Run Monte Carlo Sprint Simulations (10,000 runs): communicate delivery confidence as probability ranges, not point estimates</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x7"><label for="x7">Understand why historical Throughput is a superior planning input to story point estimation</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x8"><label for="x8">Use predictability data to have honest PI commitment conversations with Product Management</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x9"><label for="x9">Build and maintain a Sprint Predictability Tracker — spot capacity erosion, scope creep, and trend shifts before they become crises</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Dependency & Architecture -->
+      <div class="cat-group">
+        <div class="cat-title">Dependencies &amp; Technical Agility</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x10"><label for="x10">Identify where dependencies break down: PI Planning boards vs Jira entry is the most common failure point</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x11"><label for="x11">Ensure dependencies captured in PI Planning are transcribed to Jira with consistent link types — not lost in translation</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x12"><label for="x12">Understand that independent deployments and a meaningful UAT gate are structurally incompatible without feature flags or a shared ART cadence</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x13"><label for="x13">Coach the team to distinguish technical debt as a flow metric problem — not just a code quality problem</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Portfolio & Strategy -->
+      <div class="cat-group">
+        <div class="cat-title">Portfolio &amp; Value Stream Thinking</div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x14"><label for="x14">Prepare a value stream view of team-level flow metrics and present it to at least one senior stakeholder — make value creation and waste visible in language they use</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x15"><label for="x15">Influence ART Backlog prioritisation through data — not advocacy alone</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x16"><label for="x16">Understand Lean Portfolio Management (LPM) — how portfolio-level decisions shape team-level capacity</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x17"><label for="x17">Use the SAFe Coaches Handbook RTE readiness model to benchmark ART health — not just team health</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Culture & Organisation -->
+      <div class="cat-group">
+        <div class="cat-title">Culture &amp; Organisational Change</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x18"><label for="x18">Recognise that need-to-know information cultures undermine agile transparency at source — address it at leadership level</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x19"><label for="x19">Facilitate cross-team retrospectives and Communities of Practice — improvement doesn't stop at team boundaries</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x20"><label for="x20">Apply Tuckman's Stages of Team Dynamics to diagnose where a team is — and what they need from you next</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x21"><label for="x21">Complete SASM (SAFe Advanced Scrum Master) training — treat it as the start of systems-level coaching competency, not the end</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x22"><label for="x22">Complete SAFe POPM training — the certification marks the beginning of the competency journey, not its completion; apply it across at least two PIs</label><span class="tag tag-po">PO</span>
+        </div>
+      </div>
+
+      <!-- Metrics Mastery -->
+      <div class="cat-group">
+        <div class="cat-title">Metrics Mastery</div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x23"><label for="x23">Use rolling averages and trend lines — never make decisions from a single sprint's data</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x24"><label for="x24">Build a coherent metrics dashboard: Throughput + WIP + Cycle Time + Predictability + Flow Efficiency — all in one story</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x25"><label for="x25">Explain the difference between metrics that measure team performance and metrics that improve team behaviour — coach teams to own the latter</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x26"><label for="x26">Integrate Great Gadgets (StonikByte) flow metrics with Jira data — know which JQL drives which metric and why</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- EBM — McGreal/Jocham Expert Level -->
+      <div class="cat-group">
+        <div class="cat-title">Evidence-Based Management <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
+
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x27"><label for="x27">Apply the 3 EBM Key Value Areas: Current Value (what we deliver now), Time to Market (how fast), Ability to Innovate (sustainability)</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x28"><label for="x28">Identify proxy metrics for Current Value relevant to your insurance product context — in KYC, story count is not enough; find what signals actual customer value in a regulated environment</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x29"><label for="x29">Distinguish leading from lagging indicators — leading predict future value, lagging confirm past delivery</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x30"><label for="x30">Make the case for tracking Ability to Innovate at ART level — quantify how much capacity goes to maintenance vs new value, and present the data to leadership; full measurement is a 36-month goal</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x31"><label for="x31">Use evidence, not opinion, to justify backlog ordering — ROI, risk, and validated customer data outweigh stakeholder seniority</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x32"><label for="x32">Know when to pivot vs persevere: Sprint Review feedback is the signal — treat assumptions as hypotheses until validated in the market</label><span class="tag tag-po">PO</span>
+        </div>
+      </div>
+
+      <!-- SM Onboarding Diagnostic — Wolpers 60 Questions -->
+      <div class="cat-group">
+        <div class="cat-title">SM Onboarding Diagnostic <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x33"><label for="x33">When joining a new team, prepare a structured 60-min diagnostic: backlog health, metrics, technical debt, and team challenges — before forming any opinions</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x34"><label for="x34">Ask the PO: What is your product vision? How do you learn about new requirements? How much time goes to user research? — these reveal discovery maturity</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x35"><label for="x35">Ask developers: Who created the DoD? What is the technical debt level? How much sprint capacity goes to refactoring? — 20% is the minimum health signal</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x36"><label for="x36">Ask the team: How many stories are typically unfinished per sprint, and why? Regularly missing Sprint Goals is a critical coaching signal — not a capacity problem</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x37"><label for="x37">Close every onboarding session with an open question: "What are the 3 main challenges the team faces today?" — use the answers to seed the next retrospective</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- SM Mastery — Geoff Watts -->
+      <div class="cat-group">
+        <div class="cat-title">SM Mastery: Good → Great <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Watts</span></div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x38"><label for="x38">A good SM grasps the responsibilities of the role. A great SM grasps the skills and mindset — know which one you are currently operating from</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x39"><label for="x39">A good SM will be indispensable to a team. A great SM becomes both dispensable and wanted — the team functions without you, and still chooses to work with you</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x40"><label for="x40">A good SM maintains team harmony. A great SM guides a team through disharmony to reach a new level — conflict is a signal, not a failure</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x41"><label for="x41">Master the power of silence in facilitation — when you feel the urge to speak, wait a little longer; the team fills the space with what actually matters</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x42"><label for="x42">Hold the RE-TRAINED model (Watts): Respected, Enabling, Tactful, Resourceful, Alternative, Inspiring, Nurturing, Empathic, Disruptive — assess yourself honestly against each dimension</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x43"><label for="x43">Vary your retrospective formats deliberately — a repetitive retro is a retro the team has stopped believing in; rotate formats to restore engagement</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x44"><label for="x44">Ask for coaching feedback from your own team at least once per quarter — the act of asking increases respect regardless of the answers you receive</label><span class="tag tag-sm">SM</span>
+        </div>
+      </div>
+
+      <!-- Flow Framework — Mik Kersten: Project to Product -->
+      <div class="cat-group">
+        <div class="cat-title">Flow Framework <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Kersten</span></div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x45"><label for="x45">Understand the shift from project mode to product mode: project management optimises for time and budget; product management optimises for value stream flow</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x46"><label for="x46">Know the 4 Flow Item types (Kersten): Features (new value), Defects (quality), Risks (security/compliance), Debts (impediments to future delivery) — every work item maps to exactly one</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x47"><label for="x47">Track Flow Distribution across the 4 item types — an imbalance (e.g. 80% features, 5% debt) reveals unsustainable delivery strategy before it becomes a crisis</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x48"><label for="x48">Prepare a business-language metrics summary (Flow Velocity, Flow Time, Predictability) and present it to at least one senior stakeholder — translate delivery data into business impact, not just team performance</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x49"><label for="x49">Treat technical debt work as a Flow Item with its own business case — never let it be invisible or deferred indefinitely as "not a feature"</label><span class="tag tag-po">PO</span>
+        </div>
+      </div>
+
+      <!-- DevOps Three Ways -->
+      <div class="cat-group">
+        <div class="cat-title">DevOps &amp; Delivery Flow <span style="font-weight:400;color:#576475;font-size:0.72rem;">— DevOps Handbook</span></div>
+
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x50"><label for="x50">Understand the Three Ways of DevOps: Flow (left to right, fast delivery), Feedback (right to left, fast learning), Continual Learning (prevent recurrence, share knowledge)</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="team">
+          <input type="checkbox" id="x51"><label for="x51">Apply small batch thinking: smaller work items reduce risk, shorten feedback loops, and make flow problems visible before they become blockers</label><span class="tag tag-all">Team</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x52"><label for="x52">Identify and document deployment lead time as a systemic impediment with data — in a regulated insurance environment, resolution is likely a 36+ month goal; surfacing it with evidence is the 24-month target</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="dev">
+          <input type="checkbox" id="x53"><label for="x53">Build quality in at the source through continuous integration — defects discovered six months later lose the cause-and-effect link needed to prevent recurrence</label><span class="tag tag-dev">Dev</span>
+        </div>
+      </div>
+
+      <!-- Coaching Stance & Self-Awareness — ICAgile + Lukassen -->
+      <div class="cat-group">
+        <div class="cat-title">Coaching Stance &amp; Customer Insight <span style="font-weight:400;color:#576475;font-size:0.72rem;">— ICAgile · Lukassen</span></div>
+
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x54"><label for="x54">In every coaching moment, consciously choose your stance — teaching, mentoring, facilitating, or coaching — and know why you chose it (ICAgile LO 1.1.1)</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x55"><label for="x55">Develop emotional intelligence as the underpinning of coaching: self-awareness prevents your biases from contaminating how you facilitate the team (ICAgile LO 2.1.1)</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="sm">
+          <input type="checkbox" id="x56"><label for="x56">Use powerful questions, not leading questions: "What did you learn?" lands differently than "Did that work?" — open questions trigger insight, closed questions confirm assumptions</label><span class="tag tag-sm">SM</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x57"><label for="x57">Build and maintain user personas grounded in research — know your users as people, not personas on a slide: their jobs-to-be-done, fears, and goals drive backlog ordering (Lukassen)</label><span class="tag tag-po">PO</span>
+        </div>
+        <div class="check-item role-visible" data-roles="po">
+          <input type="checkbox" id="x58"><label for="x58">Stay outcome-oriented not output-oriented: a PO accountable only for delivered features is operating as a project manager — accountability extends to the value those features create (Lukassen)</label><span class="tag tag-po">PO</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /tier-expert -->
+
+</div><!-- /container -->
+
+<div class="reset-wrap">
+  <button class="reset-btn" onclick="resetAll()">↺ Reset all checkboxes</button>
+</div>
+
+<div class="legend">
+  <span>Role tags:</span>
+  <span class="tag tag-sm">SM</span> Scrum Master &nbsp;·&nbsp;
+  <span class="tag tag-po">PO</span> Product Owner &nbsp;·&nbsp;
+  <span class="tag tag-dev">Dev</span> Developers &nbsp;·&nbsp;
+  Items with no tag apply to all roles.
+  <span style="margin-left:auto;color:#576475;font-size:0.78rem;">Sources: Scrum Guide 2020 · SAFe 6.0 · Wolpers 2021/2024 · McGreal &amp; Jocham 2018 · Watts 2021 · Kersten 2018 · DevOps Handbook · ICAgile · Lukassen &amp; Schuurman 2023 · Agile Manifesto · Little's Law</span>
+</div>
+
+<script>
+  function isCheckedOnlyEnabled() {
+    const el = document.getElementById('checkedOnlyToggle');
+    return !!(el && el.checked);
+  }
+
+  function getSelectedRoles() {
+    const roles = [];
+    if (document.getElementById('filterTeam')?.checked) roles.push('team');
+    if (document.getElementById('filterSM')?.checked) roles.push('sm');
+    if (document.getElementById('filterPO')?.checked) roles.push('po');
+    if (document.getElementById('filterDev')?.checked) roles.push('dev');
+    return roles;
+  }
+
+  function getSelectedTiers() {
+    const tiers = [];
+    if (document.getElementById('filterFund')?.checked) tiers.push('fund');
+    if (document.getElementById('filterExp')?.checked) tiers.push('exp');
+    if (document.getElementById('filterXp')?.checked) tiers.push('xp');
+    return tiers;
+  }
+
+  // ── Timeline config ───────────────────────────────────────────
+  const TL_START  = new Date('2026-03-26T00:00:00');
+  const TL_TARGET = new Date('2028-03-26T00:00:00');
+
+  function getTierForId(id) {
+    if (id.startsWith('f')) return 'fund';
+    if (id.startsWith('e')) return 'exp';
+    if (id.startsWith('x')) return 'xp';
+    return null;
+  }
+
+  // ── Toggle timeline panel ─────────────────────────────────────
+  function toggleTimeline() {
+    const body = document.getElementById('tl-body');
+    const icon = document.getElementById('tl-icon');
+    const open = body.classList.contains('open');
+    if (open) {
+      body.classList.remove('open');
+      icon.classList.remove('open');
+    } else {
+      body.classList.add('open');
+      icon.classList.add('open');
+      buildRulers();
+      positionToday();
+      updateTierBars();
+    }
+  }
+
+  // ── Build month rulers ────────────────────────────────────────
+  let rulersBuilt = false;
+  function buildRulers() {
+    if (rulersBuilt) return;
+    rulersBuilt = true;
+    const el = document.getElementById('ruler-dev');
+    if (!el) return;
+    for (let m = 1; m <= 24; m++) {
+      const t = document.createElement('div');
+      t.className = 'tl-ruler-tick';
+      t.textContent = 'M' + m;
+      el.appendChild(t);
+    }
+  }
+
+  // ── Position TODAY marker ─────────────────────────────────────
+  function positionToday() {
+    const now = new Date();
+    const elapsed = Math.max(0, now - TL_START);
+    const total   = TL_TARGET - TL_START;
+    const pct     = Math.min(100, Math.max(0, (elapsed / total) * 100));
+    const el = document.getElementById('today-dev');
+    if (el) el.style.left = pct + '%';
+  }
+
+  // ── Countdown ─────────────────────────────────────────────────
+  function pad2(n) { return String(n).padStart(2,'0'); }
+
+  function updateCountdown() {
+    const now  = new Date();
+    const diff = TL_TARGET - now;
+    const elapsed = now - TL_START;
+    const total   = TL_TARGET - TL_START;
+    const pct = Math.max(0, Math.min(100, (elapsed / total) * 100));
+    const el = document.getElementById('tl-elapsed-pct');
+    if (el) el.textContent = pct.toFixed(1) + '%';
+
+    const totalSec = Math.max(0, Math.floor(diff / 1000));
+    const days = Math.floor(totalSec / 86400);
+    const hrs  = Math.floor((totalSec % 86400) / 3600);
+    const mins = Math.floor((totalSec % 3600) / 60);
+    const secs = totalSec % 60;
+
+    const dEl = document.getElementById('tl-days');
+    const hEl = document.getElementById('tl-hrs');
+    const mEl = document.getElementById('tl-min');
+    const sEl = document.getElementById('tl-sec');
+    if (dEl) dEl.textContent = String(days).padStart(3,'0');
+    if (hEl) hEl.textContent = pad2(hrs);
+    if (mEl) mEl.textContent = pad2(mins);
+    if (sEl) sEl.textContent = pad2(secs);
+  }
+
+  // ── Tier progress bars (live from checkboxes) ─────────────────
+  function updateTierBars() {
+    // Per-tier totals across ALL items (for single unified bar)
+    const tiers = {
+      fund: {total:0, checked:0},
+      exp:  {total:0, checked:0},
+      xp:   {total:0, checked:0}
+    };
+
+    // Per-role totals for stat labels
+    const roleStats = {
+      team:{ fund:{t:0,c:0}, exp:{t:0,c:0}, xp:{t:0,c:0} },
+      dev: { fund:{t:0,c:0}, exp:{t:0,c:0}, xp:{t:0,c:0} },
+      po:  { fund:{t:0,c:0}, exp:{t:0,c:0}, xp:{t:0,c:0} },
+      sm:  { fund:{t:0,c:0}, exp:{t:0,c:0}, xp:{t:0,c:0} },
+    };
+
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
+      const item = cb.closest('.check-item');
+      const tier = getTierForId(cb.id);
+      if (!tier) return;
+
+      const rawRoles = (item.getAttribute('data-roles') || '').split(' ');
+      const appliesToTeam = rawRoles.includes('team');
+      const appliesToDev  = rawRoles.includes('team') || rawRoles.includes('dev');
+      const appliesToPO   = rawRoles.includes('team') || rawRoles.includes('po');
+      const appliesToSM   = rawRoles.includes('team') || rawRoles.includes('sm');
+      if (appliesToTeam) { roleStats.team[tier].t++; if (cb.checked) roleStats.team[tier].c++; }
+      if (appliesToDev)  { roleStats.dev[tier].t++;  if (cb.checked) roleStats.dev[tier].c++;  }
+      if (appliesToPO)   { roleStats.po[tier].t++;   if (cb.checked) roleStats.po[tier].c++;   }
+      if (appliesToSM)   { roleStats.sm[tier].t++;   if (cb.checked) roleStats.sm[tier].c++;   }
+
+      // Global tiers for bottom summary (role-visible only)
+      if (item.classList.contains('role-visible')) {
+        tiers[tier].total++;
+        if (cb.checked) tiers[tier].checked++;
+      }
+    });
+
+    // ── 1. Single unified bar fills ───────────────────────────────
+    const pctOf = (s) => s.t ? (s.c / s.t) * 100 : 0;
+
+    // Combined across all roles for each tier
+    const fundAll = { t: roleStats.sm.fund.t, c: roleStats.sm.fund.c }; // SM has most items, use as proxy
+    setFill('fill-dev-fund', pctOf(roleStats.dev.fund));  // Fundamentals segment
+    setFill('fill-dev-exp',  pctOf(roleStats.dev.exp));   // Experienced segment (shared base)
+    setFill('fill-sm-xp',    pctOf(roleStats.sm.xp));     // Expert segment
+
+    // ── 2. Bottom summary bars ────────────────────────────────────
+    Object.entries(tiers).forEach(([key, {total, checked}]) => {
+      const pct = total ? Math.round((checked / total) * 100) : 0;
+      const pctEl  = document.getElementById('tp-pct-' + key);
+      const fillEl = document.getElementById('tp-fill-' + key);
+      const cntEl  = document.getElementById('tp-cnt-' + key);
+      if (pctEl)  pctEl.textContent  = pct + '%';
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (cntEl)  cntEl.textContent  = checked + ' / ' + total;
+    });
+
+    // ── 3. Per-role stat labels ───────────────────────────────────
+    updateRoleStat('stat-team', roleStats.team);
+    updateRoleStat('stat-dev',  roleStats.dev);
+    updateRoleStat('stat-po',   roleStats.po);
+    updateRoleStat('stat-sm',   roleStats.sm);
+    updateSummaryStats();
+  }
+
+  function setFill(id, pct) {
+    const el = document.getElementById(id);
+    if (el) el.style.width = pct + '%';
+  }
+
+  function updateRoleStat(baseId, stats) {
+    const totalAll   = stats.fund.t + stats.exp.t + stats.xp.t;
+    const checkedAll = stats.fund.c + stats.exp.c + stats.xp.c;
+    const pctAll     = totalAll ? Math.round((checkedAll / totalAll) * 100) : 0;
+
+    // Count label  e.g. "9/56"
+    const countEl = document.getElementById(baseId);
+    if (countEl) countEl.textContent = checkedAll + '/' + totalAll;
+
+    // Pct label  e.g. "16%"
+    const pctEl = document.getElementById(baseId + '-pct');
+    if (pctEl) pctEl.textContent = pctAll + '%';
+
+    // Progress bar fill
+    const barEl = document.getElementById(baseId + '-bar');
+    if (barEl) barEl.style.width = pctAll + '%';
+  }
+
+  // ── Summary stat box ──────────────────────────────────────────
+  function updateSummaryStats() {
+    const visible = [...document.querySelectorAll('.check-item.role-visible input[type="checkbox"]')];
+    const total   = visible.length;
+    const checked = visible.filter(c => c.checked).length;
+    const pct     = total ? Math.round((checked / total) * 100) : 0;
+
+    // Per-tier for all items (not role-filtered) to get milestone
+    let fundC=0,fundT=0, expC=0,expT=0, xpC=0,xpT=0;
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
+      const tier = getTierForId(cb.id);
+      if (!tier) return;
+      if (tier==='fund') { fundT++; if(cb.checked) fundC++; }
+      if (tier==='exp')  { expT++;  if(cb.checked) expC++;  }
+      if (tier==='xp')   { xpT++;   if(cb.checked) xpC++;   }
+    });
+
+    const fundPct = fundT ? Math.round(fundC/fundT*100) : 0;
+    const expPct  = expT  ? Math.round(expC/expT*100)  : 0;
+    const xpPct   = xpT   ? Math.round(xpC/xpT*100)   : 0;
+
+    // Estimate months remaining (linear from 24 months total)
+    const monthsElapsed = Math.max(0, (new Date() - TL_START) / (1000*60*60*24*30.44));
+    const monthsRemaining = Math.max(0, 24 - monthsElapsed).toFixed(1);
+
+    // Next milestone
+    let milestone = '';
+    if (fundPct < 100)       milestone = fundPct + '% Fundamentals — complete this first';
+    else if (expPct < 100)   milestone = expPct + '% Experienced — keep going';
+    else if (xpPct < 100)    milestone = xpPct + '% Expert — almost there!';
+    else                     milestone = '🎉 All tiers complete!';
+
+    const tcEl  = document.getElementById('stat-total-checked');
+    const pctEl = document.getElementById('stat-overall-pct');
+    const moEl  = document.getElementById('stat-months-left');
+    const msEl  = document.getElementById('stat-milestone');
+
+    if (tcEl)  tcEl.innerHTML  = checked + ' <span style="font-size:0.7rem;font-weight:500;color:#576475;">/ ' + total + ' visible</span>';
+    if (pctEl) pctEl.textContent = pct + '%';
+    if (moEl)  moEl.textContent  = monthsRemaining + ' mo';
+    if (msEl)  msEl.textContent  = milestone;
+  }
+
+  // ── Role filter ───────────────────────────────────────────────
+
+  // ── Tier collapse ─────────────────────────────────────────────
+  function toggleTier(id) {
+    const body = document.getElementById('body-' + id);
+    const tog  = document.getElementById('tog-' + id);
+    const isOpen = tog.classList.contains('open');
+    if (isOpen) {
+      body.style.display = 'none';
+      tog.classList.remove('open');
+    } else {
+      body.style.display = '';
+      tog.classList.add('open');
+      rebalanceTierBody(body);
+    }
+  }
+
+  // ── Overall progress ──────────────────────────────────────────
+  function updateProgress() {
+    const checkedOnly = isCheckedOnlyEnabled();
+    const selectedRoles = getSelectedRoles();
+    const selectedTiers = getSelectedTiers();
+
+    document.querySelectorAll('.check-item[data-roles]').forEach(item => {
+      const itemRole = (item.getAttribute('data-roles') || '').trim();
+      const cb = item.querySelector('input[type="checkbox"]');
+      const tier = getTierForId(cb?.id || '');
+
+      const roleMatch = selectedRoles.length === 0 ? true : selectedRoles.includes(itemRole);
+      const tierMatch = selectedTiers.length === 0 ? true : selectedTiers.includes(tier);
+      const checkedMatch = checkedOnly ? !!(cb && cb.checked) : true;
+
+      const visible = roleMatch && tierMatch && checkedMatch;
+      item.classList.toggle('role-visible', visible);
+    });
+
+    // Hide tier sections with no visible items and rebalance visible groups
+    document.querySelectorAll('.tier').forEach(tier => {
+      const body = tier.querySelector('.tier-body');
+      if (!body) return;
+      const hasVisible = body.querySelector('.check-item.role-visible');
+      tier.style.display = hasVisible ? '' : 'none';
+    });
+    rebalanceAllTiers();
+
+    const visible = [...document.querySelectorAll('.check-item.role-visible input[type="checkbox"]')];
+    const total   = visible.length;
+    const checked = visible.filter(c => c.checked).length;
+    const pct     = total ? Math.round((checked / total) * 100) : 0;
+
+    document.getElementById('progFill').style.width  = pct + '%';
+    document.getElementById('progLabel').textContent = checked + ' / ' + total;
+    document.getElementById('floatPct').textContent     = pct + '%';
+    document.getElementById('floatChecked').textContent = checked;
+    document.getElementById('floatTotal').textContent   = total;
+
+    const circumference = 113.1;
+    const offset = circumference - (pct / 100) * circumference;
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+
+    updateTierBars();
+  }
+
+  // ── Checkbox interaction ──────────────────────────────────────
+  document.addEventListener('change', e => {
+    if (e.target.type === 'checkbox') {
+      const item = e.target.closest('.check-item');
+      if (!item) {
+        updateProgress();
+        return;
+      }
+      if (e.target.dataset.readonly === 'true') {
+        e.target.checked = !e.target.checked;
+        return;
+      }
+      if (e.target.checked) item.classList.add('done');
+      else item.classList.remove('done');
+      saveState();
+      updateProgress();
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const cb = e.target.closest('.check-item input[type="checkbox"]');
+    if (cb && cb.dataset.readonly === 'true') {
+      e.preventDefault();
+    }
+  });
+
+  // ── Supabase Persistence ──────────────────────────────────────
+  const SUPABASE_URL = 'https://smzraxqnwhzksugqndpo.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNtenJheHFud2h6a3N1Z3FuZHBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4Mzc4NjcsImV4cCI6MjA5MTQxMzg2N30.ZQc6f-jn6qMfTHF5X36ZSQ3UZgWTKdjo4LZBd6wrpzs';
+  const TABLE_URL    = `${SUPABASE_URL}/rest/v1/checklist_progress`;
+  const HEADERS      = {
+    'apikey':        SUPABASE_KEY,
+    'Authorization': `Bearer ${SUPABASE_KEY}`,
+    'Content-Type':  'application/json',
+    'Prefer':        'return=minimal'
+  };
+
+  let _isOwner     = false;
+  let _saveTimeout = null;
+
+  // ── Owner detection via ?owner in URL ─────────────────────────
+  // Open the file as  checklist.html?owner  to enable editing
+  function detectOwner() {
+    return new URLSearchParams(window.location.search).has('owner');
+  }
+
+  // ── View-only mode for non-owners ─────────────────────────────
+  function applyViewOnlyMode() {
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
+      cb.dataset.readonly = 'true';
+      cb.style.opacity = '0.5';
+      cb.style.cursor  = 'not-allowed';
+    });
+    document.querySelectorAll('.check-item').forEach(item => {
+      item.style.cursor = 'default';
+    });
+    const resetBtn = document.querySelector('.reset-btn');
+    if (resetBtn) resetBtn.style.display = 'none';
+
+    // View-only banner
+    const banner = document.createElement('div');
+    banner.style.cssText = `
+      max-width:960px;margin:0 auto 18px;
+      background:#fff;border:1px solid #E1DFDB;
+      border-left:3px solid #0FB6DF;
+      border-radius:0 5px 5px 0;
+      padding:10px 16px;
+      font-size:0.85rem;color:#576475;
+      display:flex;align-items:center;gap:10px;
+    `;
+    banner.innerHTML = '<span style="font-size:1.1rem;">👁</span>' +
+      '<span><strong style="color:#2C2C34;">View only.</strong> ' +
+      'This checklist is maintained by Audun Taraldsen. ' +
+      'Progress is visible but cannot be edited.</span>';
+    const container = document.querySelector('.container');
+    if (container) container.parentNode.insertBefore(banner, container);
+  }
+
+  // ── Load state from Supabase ──────────────────────────────────
+  async function loadState() {
+    _isOwner = detectOwner();
+    if (!_isOwner) applyViewOnlyMode();
+
+    try {
+      const r = await fetch(`${TABLE_URL}?id=eq.1&select=checked_items`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const rows = await r.json();
+      if (rows && rows.length > 0 && rows[0].checked_items) {
+        const checkedIds = JSON.parse(rows[0].checked_items);
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.checked = false;
+          cb.closest('.check-item').classList.remove('done');
+        });
+        checkedIds.forEach(id => {
+          const cb = document.getElementById(id);
+          if (cb) {
+            cb.checked = true;
+            cb.closest('.check-item').classList.add('done');
+          }
+        });
+      }
+    } catch(e) {
+      console.warn('Could not load from Supabase:', e);
+    }
+  }
+
+  // ── Save to Supabase (debounced 800ms) ────────────────────────
+  function saveState() {
+    if (!_isOwner) return;
+    clearTimeout(_saveTimeout);
+    _saveTimeout = setTimeout(() => saveToSupabase(), 800);
+  }
+
+  async function saveToSupabase() {
+    const checkedIds = [];
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      if (cb.checked) checkedIds.push(cb.id);
+    });
+    try {
+      await fetch(`${TABLE_URL}?id=eq.1`, {
+        method:  'PATCH',
+        headers: HEADERS,
+        body:    JSON.stringify({
+          checked_items: JSON.stringify(checkedIds),
+          updated_at:    new Date().toISOString()
+        })
+      });
+      showToast('Saved ✓');
+    } catch(e) {
+      console.warn('Supabase save failed:', e);
+      showToast('⚠ Could not save');
+    }
+  }
+
+  // ── Reset all ─────────────────────────────────────────────────
+  async function resetAll() {
+    if (!_isOwner) return;
+    if (!confirm('Reset all checkboxes? This cannot be undone.')) return;
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.check-item').classList.remove('done');
+    });
+    updateProgress();
+    try {
+      await fetch(`${TABLE_URL}?id=eq.1`, {
+        method:  'PATCH',
+        headers: HEADERS,
+        body:    JSON.stringify({ checked_items: '[]', updated_at: new Date().toISOString() })
+      });
+      showToast('Reset ✓');
+    } catch(e) {
+      showToast('⚠ Could not reset');
+    }
+  }
+
+  // ── Toast ─────────────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    let toast = document.getElementById('save-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'save-toast';
+      toast.style.cssText = `
+        position:fixed;bottom:80px;right:16px;
+        background:#002855;color:#fff;
+        font-family:'PT Root UI',sans-serif;font-size:0.82rem;font-weight:500;
+        padding:9px 18px;border-radius:5px;
+        box-shadow:0 4px 16px rgba(0,0,0,0.18);
+        opacity:0;transition:opacity 0.2s;
+        pointer-events:none;z-index:9999;
+      `;
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.style.opacity = '0'; }, 1800);
+  }
+
+  function getColumnCount() {
+    if (window.innerWidth >= 960) return 3;
+    if (window.innerWidth >= 700) return 2;
+    return 1;
+  }
+
+  function rebalanceTierBody(body) {
+    if (!body) return;
+
+    const allGroups = [...body.querySelectorAll('.cat-group')];
+    if (allGroups.length === 0) return;
+
+    allGroups.forEach(g => {
+      g.style.display = g.querySelector('.check-item.role-visible') ? '' : 'none';
+    });
+
+    const visibleGroups = allGroups.filter(g => g.style.display !== 'none');
+    const hiddenGroups = allGroups.filter(g => g.style.display === 'none');
+    const colCount = getColumnCount();
+
+    body.innerHTML = '';
+    const cols = [];
+
+    for (let i = 0; i < colCount; i++) {
+      const col = document.createElement('div');
+      col.className = 'tier-col';
+      body.appendChild(col);
+      cols.push(col);
+    }
+
+    const heights = new Array(colCount).fill(0);
+
+    visibleGroups.forEach(group => {
+      let shortestIndex = 0;
+      for (let i = 1; i < colCount; i++) {
+        if (heights[i] < heights[shortestIndex]) shortestIndex = i;
+      }
+      cols[shortestIndex].appendChild(group);
+      heights[shortestIndex] += Math.max(group.offsetHeight || 0, group.textContent.length);
+    });
+
+    hiddenGroups.forEach(group => {
+      cols[0].appendChild(group);
+    });
+  }
+
+  function rebalanceAllTiers() {
+    document.querySelectorAll('.tier-body').forEach(body => rebalanceTierBody(body));
+  }
+
+  // ── Init ──────────────────────────────────────────────────────
+  try { localStorage.removeItem('agile_checklist_v1'); } catch(e) {}
+  window.addEventListener('resize', () => {
+    clearTimeout(window.__rebalanceTimer);
+    window.__rebalanceTimer = setTimeout(rebalanceAllTiers, 120);
+  });
+
+  loadState().then(() => {
+    updateProgress();
+    rebalanceAllTiers();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  });
+</script>
+</body>
+</html>
