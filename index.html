@@ -2127,15 +2127,17 @@
       const rows = await r.json();
       if (rows && rows.length > 0 && rows[0].checked_items) {
         const checkedIds = JSON.parse(rows[0].checked_items);
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
           cb.checked = false;
-          cb.closest('.check-item').classList.remove('done');
+          const item = cb.closest('.check-item');
+          if (item) item.classList.remove('done');
         });
         checkedIds.forEach(id => {
           const cb = document.getElementById(id);
-          if (cb) {
+          const item = cb ? cb.closest('.check-item') : null;
+          if (cb && item) {
             cb.checked = true;
-            cb.closest('.check-item').classList.add('done');
+            item.classList.add('done');
           }
         });
       }
@@ -2153,7 +2155,7 @@
 
   async function saveToSupabase() {
     const checkedIds = [];
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
       if (cb.checked) checkedIds.push(cb.id);
     });
     try {
@@ -2176,9 +2178,10 @@
   async function resetAll() {
     if (!_isOwner) return;
     if (!confirm('Reset all checkboxes? This cannot be undone.')) return;
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    document.querySelectorAll('.check-item input[type="checkbox"]').forEach(cb => {
       cb.checked = false;
-      cb.closest('.check-item').classList.remove('done');
+      const item = cb.closest('.check-item');
+      if (item) item.classList.remove('done');
     });
     updateProgress();
     try {
