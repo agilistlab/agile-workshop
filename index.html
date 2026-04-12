@@ -2279,19 +2279,44 @@
   }
 
 
-  function checkPassword() {
+  async function checkPassword() {
     const input = document.getElementById('passwordInput');
     const error = document.getElementById('passwordError');
     const overlay = document.getElementById('passwordOverlay');
     if (!input || !error || !overlay) return;
 
-    if (input.value === 'inx') {
-      overlay.style.display = 'none';
-      document.body.classList.remove('password-locked');
-      error.textContent = '';
-    } else {
-      error.textContent = 'Incorrect password';
-      input.value = '';
+    const password = input.value;
+    if (!password) {
+      error.textContent = 'Enter password';
+      input.focus();
+      return;
+    }
+
+    try {
+      const fnUrl = `${SUPABASE_URL}/functions/v1/check-password`;
+      const res = await fetch(fnUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        },
+        body: JSON.stringify({ password })
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok && data.valid === true) {
+        overlay.style.display = 'none';
+        document.body.classList.remove('password-locked');
+        error.textContent = '';
+      } else {
+        error.textContent = 'Incorrect password';
+        input.value = '';
+        input.focus();
+      }
+    } catch (e) {
+      error.textContent = 'Could not verify password';
       input.focus();
     }
   }
