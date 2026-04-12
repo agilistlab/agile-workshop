@@ -1991,7 +1991,7 @@
   }
 
   // ── Overall progress ──────────────────────────────────────────
-  function updateProgress() {
+  function updateProgress(shouldRebalance = true) {
     const checkedOnly = isCheckedOnlyEnabled();
     const selectedRoles = getSelectedRoles();
     const selectedTiers = getSelectedTiers();
@@ -2009,14 +2009,22 @@
       item.classList.toggle('role-visible', visible);
     });
 
-    // Hide tier sections with no visible items and rebalance visible groups
+    // Hide tier sections with no visible items
     document.querySelectorAll('.tier').forEach(tier => {
       const body = tier.querySelector('.tier-body');
       if (!body) return;
       const hasVisible = body.querySelector('.check-item.role-visible');
       tier.style.display = hasVisible ? '' : 'none';
     });
-    rebalanceAllTiers();
+
+    if (shouldRebalance) {
+      rebalanceAllTiers();
+    } else {
+      document.querySelectorAll('.cat-group').forEach(grp => {
+        const hasVisible = grp.querySelector('.check-item.role-visible');
+        grp.style.display = hasVisible ? '' : 'none';
+      });
+    }
 
     const visible = [...document.querySelectorAll('.check-item.role-visible input[type="checkbox"]')];
     const total   = visible.length;
@@ -2041,7 +2049,7 @@
     if (e.target.type === 'checkbox') {
       const item = e.target.closest('.check-item');
       if (!item) {
-        updateProgress();
+        updateProgress(true);
         return;
       }
       if (e.target.dataset.readonly === 'true') {
@@ -2051,7 +2059,7 @@
       if (e.target.checked) item.classList.add('done');
       else item.classList.remove('done');
       saveState();
-      updateProgress();
+      updateProgress(isCheckedOnlyEnabled());
     }
   });
 
