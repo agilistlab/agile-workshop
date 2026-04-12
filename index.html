@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agile Learning Checklist</title>
+<!-- GitHub Pages: https://agilistlab.github.io/agile-workshop/ -->
 <link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -713,9 +714,102 @@
 
   /* tl-lbl-wrap — no longer used */
   .tl-lbl-wrap { display: none; }
+
+  /* Password gate */
+  .password-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 40, 85, 0.96);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 24px;
+  }
+
+  .password-modal {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.28);
+    padding: 28px 24px 22px;
+    text-align: center;
+  }
+
+  .password-modal h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #002855;
+    margin-bottom: 8px;
+  }
+
+  .password-modal p {
+    font-size: 0.9rem;
+    color: #576475;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .password-input {
+    width: 100%;
+    border: 1px solid #E1DFDB;
+    border-radius: 5px;
+    padding: 12px 14px;
+    font-family: 'PT Root UI', sans-serif;
+    font-size: 0.95rem;
+    color: #2C2C34;
+    margin-bottom: 12px;
+    outline: none;
+  }
+
+  .password-input:focus {
+    border-color: #0FB6DF;
+  }
+
+  .password-btn {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 14px;
+    background: #002855;
+    color: #fff;
+    font-family: 'PT Root UI', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .password-btn:hover {
+    background: #0a3060;
+  }
+
+  .password-error {
+    min-height: 18px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: #c62828;
+  }
+
+  body.password-locked {
+    overflow: hidden;
+  }
+
 </style>
 </head>
-<body>
+<body class="password-locked">
+
+<div class="password-overlay" id="passwordOverlay">
+  <div class="password-modal">
+    <h2>Enter access password</h2>
+    <p>Please enter the password to open this checklist.</p>
+    <input type="password" id="passwordInput" class="password-input" placeholder="Password" autocomplete="off">
+    <button class="password-btn" onclick="checkPassword()">Enter</button>
+    <div class="password-error" id="passwordError"></div>
+  </div>
+</div>
+
 
 <!-- Floating progress widget -->
 <div class="float-header">
@@ -1985,7 +2079,8 @@
   // ── Owner detection via ?owner in URL ─────────────────────────
   // Open the file as  checklist.html?owner  to enable editing
   function detectOwner() {
-    return new URLSearchParams(window.location.search).has('owner');
+    const url = new URL(window.location.href);
+    return url.searchParams.has('owner') || url.hash === '#owner';
   }
 
   // ── View-only mode for non-owners ─────────────────────────────
@@ -2171,6 +2266,38 @@
   function rebalanceAllTiers() {
     document.querySelectorAll('.tier-body').forEach(body => rebalanceTierBody(body));
   }
+
+
+  function checkPassword() {
+    const input = document.getElementById('passwordInput');
+    const error = document.getElementById('passwordError');
+    const overlay = document.getElementById('passwordOverlay');
+    if (!input || !error || !overlay) return;
+
+    if (input.value === 'inx') {
+      overlay.style.display = 'none';
+      document.body.classList.remove('password-locked');
+      error.textContent = '';
+    } else {
+      error.textContent = 'Incorrect password';
+      input.value = '';
+      input.focus();
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    const overlay = document.getElementById('passwordOverlay');
+    if (!overlay || overlay.style.display === 'none') return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      checkPassword();
+    }
+  });
+
+  window.addEventListener('load', () => {
+    const input = document.getElementById('passwordInput');
+    if (input) input.focus();
+  });
 
   // ── Init ──────────────────────────────────────────────────────
   try { localStorage.removeItem('agile_checklist_v1'); } catch(e) {}
