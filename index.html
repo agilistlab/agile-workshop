@@ -2309,6 +2309,7 @@
       if (res.ok && data.valid === true) {
         overlay.style.display = 'none';
         document.body.classList.remove('password-locked');
+        sessionStorage.setItem('access_granted','true');
         error.textContent = '';
       } else {
         error.textContent = 'Incorrect password';
@@ -2333,6 +2334,15 @@
   window.addEventListener('load', () => {
     const input = document.getElementById('passwordInput');
     if (input) input.focus();
+  });
+
+  
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('passwordOverlay');
+    if (sessionStorage.getItem('access_granted') === 'true') {
+      if (overlay) overlay.style.display = 'none';
+      document.body.classList.remove('password-locked');
+    }
   });
 
   // ── Init ──────────────────────────────────────────────────────
