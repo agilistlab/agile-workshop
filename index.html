@@ -339,11 +339,11 @@
   }
 
   .check-item.in-progress {
-    background: #eeeeee;
+    background: #595959;
   }
 
   .check-item.done {
-    background: #d9f1c2;
+    background: #4F7831;
   }
 
   .check-item.done label {
@@ -810,11 +810,11 @@
 
 /* Match checkbox color to state */
 .check-item.done input[type="checkbox"]:not(.in-progress-cb) {
-  accent-color: #d9f1c2;
+  accent-color: #4F7831;
 }
 
 .check-item.in-progress .in-progress-cb {
-  accent-color: #eeeeee;
+  accent-color: #595959;
 }
 
 /* Center and tighten top filters */
@@ -850,6 +850,27 @@
 /* In Progress checkbox transparency */
 .in-progress-cb {
   opacity: 0.5;
+}
+
+/* Legend dots */
+.filter-check span::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* In Progress = grey */
+#inProgressOnlyToggle + span::before {
+  background-color: #595959;
+}
+
+/* Completed = green */
+#checkedOnlyToggle + span::before {
+  background-color: #4F7831;
 }
 </style>
 </head>
