@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Agile Learning Checklist</title>
- GitHub Pages: https://agilistlab.github.io/agile-workshop/ 
+
 <link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -67,22 +67,25 @@
   .filter-check {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-size: 0.88rem;
     color: #576475;
     white-space: nowrap;
+    line-height: 1;
   }
 
   .filter-check input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
+    margin: 0;
     accent-color: #0FB6DF;
     cursor: pointer;
+    transform: translateY(1px);
   }
 
   @media(min-width:900px){
-    .role-nav { justify-content: flex-start; }
-    .checked-only-wrap { margin-left: auto; }
+    .role-nav { justify-content: center; }
+    .checked-only-wrap { margin-left: 0; }
   }
 
   .role-btn {
@@ -1024,7 +1027,7 @@
 <label class="filter-check"><input id="filterExp" onchange="updateProgress()" type="checkbox"/><span>Experienced</span></label>
 <label class="filter-check"><input id="filterXp" onchange="updateProgress()" type="checkbox"/><span>Expert</span></label>
 </div>
-<div class="checked-only-wrap" style="display:flex;gap:14px;align-items:center;justify-content:flex-start;">
+<div class="checked-only-wrap" style="display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;">
 <label class="filter-check">
 <input id="inProgressOnlyToggle" onchange="updateProgress()" type="checkbox"/>
 <span>Filter In Progress only</span>
@@ -1885,9 +1888,12 @@
 
   // ── Summary stat box ──────────────────────────────────────────
   function updateSummaryStats() {
-    const visible = [...document.querySelectorAll('.check-item.role-visible input[type="checkbox"]')];
-    const total   = visible.length;
-    const checked = visible.filter(c => c.checked).length;
+    const visibleItems = [...document.querySelectorAll('.check-item.role-visible')];
+    const total   = visibleItems.length;
+    const checked = visibleItems.filter(item => {
+      const doneCb = item.querySelector('input[type="checkbox"]:not(.in-progress-cb)');
+      return !!(doneCb && doneCb.checked);
+    }).length;
     const pct     = total ? Math.round((checked / total) * 100) : 0;
 
     // Per-tier for all items (not role-filtered) to get milestone
@@ -1982,9 +1988,12 @@
       });
     }
 
-    const visible = [...document.querySelectorAll('.check-item.role-visible input[type="checkbox"]')];
-    const total   = visible.length;
-    const checked = visible.filter(c => c.checked).length;
+    const visibleItems = [...document.querySelectorAll('.check-item.role-visible')];
+    const total   = visibleItems.length;
+    const checked = visibleItems.filter(item => {
+      const doneCb = item.querySelector('input[type="checkbox"]:not(.in-progress-cb)');
+      return !!(doneCb && doneCb.checked);
+    }).length;
     const pct     = total ? Math.round((checked / total) * 100) : 0;
 
     document.getElementById('progFill').style.width  = pct + '%';
@@ -2349,16 +2358,5 @@
     setInterval(updateCountdown, 1000);
   });
 </script>
-<script>
-function updateTotalCount() {
-  const total = document.querySelectorAll('.check-item').length;
-  const progressText = document.querySelector('[id*="progress"], .progress-text');
-  if (progressText) {
-    const current = progressText.textContent.split('/')[0].trim();
-    progressText.textContent = current + " / " + total;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', updateTotalCount);
-</script></body>
+</body>
 </html>
