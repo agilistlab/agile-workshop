@@ -1979,13 +1979,13 @@
 
     document.querySelectorAll('.check-item[data-roles]').forEach(item => {
       const itemRole = (item.getAttribute('data-roles') || '').trim();
-      const cb = item.querySelector('input[type="checkbox"]');
-      const tier = getTierForId(cb?.id || '');
+      const doneCb = item.querySelector('input[type="checkbox"]:not(.in-progress-cb)');
+      const ipCb = item.querySelector('.in-progress-cb');
+      const tier = getTierForId(doneCb?.id || '');
 
       const roleMatch = selectedRoles.length === 0 ? true : selectedRoles.includes(itemRole);
       const tierMatch = selectedTiers.length === 0 ? true : selectedTiers.includes(tier);
-      const ipCb = item.querySelector('.in-progress-cb');
-      const checkedMatch = checkedOnly ? !!(cb && cb.checked) : true;
+      const checkedMatch = checkedOnly ? !!(doneCb && doneCb.checked) : true;
       const inProgressMatch = inProgressOnly ? !!(ipCb && ipCb.checked) : true;
 
       const visible = roleMatch && tierMatch && checkedMatch && inProgressMatch;
