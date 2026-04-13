@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Agile Learning Checklist</title>
-<!-- GitHub Pages: https://agilistlab.github.io/agile-workshop/ -->
+ GitHub Pages: https://agilistlab.github.io/agile-workshop/ 
 <link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -814,6 +814,36 @@
 .check-item.in-progress .in-progress-cb {
   accent-color: #eeeeee;
 }
+
+/* Center and tighten top filters */
+.top-filters {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-filters-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.top-filters-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.top-filters-row input[type="checkbox"] {
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  transform: translateY(1px);
+}
 </style>
 </head>
 <body class="password-locked">
@@ -981,7 +1011,7 @@
 </div><!-- /timeline-body -->
 </div>
 <!-- Role filter -->
-<div class="role-nav" style=";display:flex;justify-content:center;flex-wrap:wrap;gap:16px;align-items:center;">
+<div class="role-nav">
 <div class="filter-group">
 <label class="filter-check"><input id="filterTeam" onchange="updateProgress()" type="checkbox"/><span>Team</span></label>
 <label class="filter-check"><input id="filterSM" onchange="updateProgress()" type="checkbox"/><span>Scrum Master</span></label>
@@ -2319,5 +2349,16 @@
     setInterval(updateCountdown, 1000);
   });
 </script>
-</body>
+<script>
+function updateTotalCount() {
+  const total = document.querySelectorAll('.check-item').length;
+  const progressText = document.querySelector('[id*="progress"], .progress-text');
+  if (progressText) {
+    const current = progressText.textContent.split('/')[0].trim();
+    progressText.textContent = current + " / " + total;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', updateTotalCount);
+</script></body>
 </html>
