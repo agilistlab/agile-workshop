@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Agile Learning Checklist</title>
 <!-- GitHub Pages: https://agilistlab.github.io/agile-workshop/ -->
-<link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -807,944 +808,843 @@
 </style>
 </head>
 <body class="password-locked">
-
 <div class="password-overlay" id="passwordOverlay">
-  <div class="password-modal">
-    <h2>Enter access password</h2>
-    <p>Please enter the password to open this checklist.</p>
-    <input type="password" id="passwordInput" class="password-input" placeholder="Password" autocomplete="off">
-    <button class="password-btn" onclick="checkPassword()">Enter</button>
-    <div class="password-error" id="passwordError"></div>
-  </div>
+<div class="password-modal">
+<h2>Enter access password</h2>
+<p>Please enter the password to open this checklist.</p>
+<input autocomplete="off" class="password-input" id="passwordInput" placeholder="Password" type="password"/>
+<button class="password-btn" onclick="checkPassword()">Enter</button>
+<div class="password-error" id="passwordError"></div>
 </div>
-
-
+</div>
 <!-- Floating progress widget -->
 <div class="float-header">
-  <div class="ring-wrap">
-    <svg width="44" height="44" viewBox="0 0 44 44">
-      <defs>
-        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#0FB6DF"/>
-          <stop offset="100%" stop-color="#002855"/>
-        </linearGradient>
-      </defs>
-      <circle class="ring-bg"   cx="22" cy="22" r="18"/>
-      <circle class="ring-fill" cx="22" cy="22" r="18" id="ringFill"/>
-    </svg>
-    <div class="ring-pct" id="floatPct">0%</div>
-  </div>
-  <div class="float-meta">
-    <div class="float-title">Progress</div>
-    <div class="float-count"><span id="floatChecked">0</span> / <span id="floatTotal">0</span> completed</div>
-  </div>
+<div class="ring-wrap">
+<svg height="44" viewbox="0 0 44 44" width="44">
+<defs>
+<lineargradient id="ringGrad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#0FB6DF"></stop>
+<stop offset="100%" stop-color="#002855"></stop>
+</lineargradient>
+</defs>
+<circle class="ring-bg" cx="22" cy="22" r="18"></circle>
+<circle class="ring-fill" cx="22" cy="22" id="ringFill" r="18"></circle>
+</svg>
+<div class="ring-pct" id="floatPct">0%</div>
 </div>
-
+<div class="float-meta">
+<div class="float-title">Progress</div>
+<div class="float-count"><span id="floatChecked">0</span> / <span id="floatTotal">0</span> completed</div>
+</div>
+</div>
 <div class="page-header">
-  <h1>Agile Learning Checklist</h1>
-  <p>A role-by-role learning path grounded in the Scrum Guide 2020, SAFe 6.0, the Agile Manifesto, Kanban, and agile metrics. Check items as your team progresses.</p>
+<h1>Agile Learning Checklist</h1>
+<p>A role-by-role learning path grounded in the Scrum Guide 2020, SAFe 6.0, the Agile Manifesto, Kanban, and agile metrics. Check items as your team progresses.</p>
 </div>
-
 <!-- ── COLLAPSIBLE TIMELINE PANEL ── -->
 <div class="timeline-panel" style="max-width:960px;margin:0 auto 28px;">
-  <button class="timeline-toggle-btn" onclick="toggleTimeline()" id="tl-btn">
-    <span class="tl-toggle-label">📅 24-Month Learning Timeline</span>
-    <span class="tl-toggle-sub">Mar 2026 → Mar 2028 · Countdown &amp; tier progress</span>
-    <span class="tl-toggle-icon" id="tl-icon">▾</span>
-  </button>
-
-  <div class="timeline-body" id="tl-body">
-
-    <!-- Countdown — centred -->
-    <div class="tl-countdown" style="flex-direction:column;align-items:center;text-align:center;gap:10px;">
-      <div>
-        <div class="tl-cd-label" style="margin-bottom:2px;">Countdown to Target · 26 March 2028</div>
-        <div class="tl-cd-target"><span id="tl-elapsed-pct" style="color:#0FB6DF;font-weight:700;">0%</span> of journey elapsed</div>
-      </div>
-      <div class="tl-cd-digits" style="justify-content:center;">
-        <div class="tl-digit"><span class="n" id="tl-days">—</span><span class="u">Days</span></div>
-        <div class="tl-sep">:</div>
-        <div class="tl-digit"><span class="n" id="tl-hrs">—</span><span class="u">Hrs</span></div>
-        <div class="tl-sep">:</div>
-        <div class="tl-digit"><span class="n" id="tl-min">—</span><span class="u">Min</span></div>
-        <div class="tl-sep">:</div>
-        <div class="tl-digit"><span class="n" id="tl-sec">—</span><span class="u">Sec</span></div>
-      </div>
-    </div>
-
-    <!-- Consolidated bar chart -->
-    <div class="tl-chart">
-
-      <!-- Single shared ruler -->
-      <div style="display:flex;margin-bottom:4px;padding-left:52px;">
-        <div class="tl-ruler" id="ruler-dev" style="flex:1;display:flex;"></div>
-      </div>
-
-      <!-- Single unified bar -->
-      <div style="position:relative;">
-
-        <!-- TODAY line -->
-        <div class="tl-today" id="today-dev"></div>
-
-        <!-- One bar: Fundamentals | Experienced | Expert -->
-        <div class="tl-track" id="track-dev" style="height:32px;">
-          <div class="tl-seg seg-fund-c" style="width:16.67%" id="dev-fund">
-            <div class="tl-seg-fill" id="fill-dev-fund"></div>
-          </div>
-          <div class="tl-seg seg-exp-c" style="width:41.67%" id="dev-exp">
-            <div class="tl-seg-fill" id="fill-dev-exp"></div>
-          </div>
-          <div class="tl-seg seg-xp-c" style="width:41.66%" id="sm-xp">
-            <div class="tl-seg-fill" id="fill-sm-xp"></div>
-          </div>
-        </div>
-
-        <!-- Phase labels — spaced to avoid overlap -->
-        <div style="position:relative;height:16px;margin-top:5px;font-size:0.58rem;color:#576475;font-weight:600;">
-          <span style="position:absolute;left:0%;">Fundamentals</span>
-          <span style="position:absolute;left:20%;">Experienced</span>
-          <span style="position:absolute;left:60%;">Expert</span>
-        </div>
-
-      </div>
-
-      <!-- Role stat cards — 4 columns -->
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">
-
-        <!-- Team -->
-        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
-          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Team</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-team-pct">0%</div>
-          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-team">0/0</div>
-          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-            <div id="stat-team-bar" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-          </div>
-        </div>
-
-        <!-- Dev -->
-        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #0FB6DF;border-radius:5px;padding:10px 12px;">
-          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0FB6DF;margin-bottom:6px;">Dev</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-dev-pct">0%</div>
-          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-dev">0/0</div>
-          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-            <div id="stat-dev-bar" style="height:100%;background:#0FB6DF;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-          </div>
-        </div>
-
-        <!-- PO -->
-        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
-          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">PO</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-po-pct">0%</div>
-          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-po">0/0</div>
-          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-            <div id="stat-po-bar" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-          </div>
-        </div>
-
-        <!-- SM -->
-        <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
-          <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">SM</div>
-          <div style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;" id="stat-sm-pct">0%</div>
-          <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="stat-sm">0/0</div>
-          <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-            <div id="stat-sm-bar" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-          </div>
-        </div>
-
-      </div>
-
-    </div><!-- /tl-chart -->
-
-
-
-    <!-- 3-column tier cards -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
-
-      <!-- Fundamentals -->
-      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
-        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">Fundamentals</div>
-        <div style="font-size:1.3rem;font-weight:700;color:#002855;line-height:1;" id="tp-pct-fund">0%</div>
-        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-fund">0 / 0</div>
-        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-          <div id="tp-fill-fund" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-        </div>
-      </div>
-
-      <!-- Experienced -->
-      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
-        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">Experienced</div>
-        <div style="font-size:1.3rem;font-weight:700;color:#576475;line-height:1;" id="tp-pct-exp">0%</div>
-        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-exp">0 / 0</div>
-        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-          <div id="tp-fill-exp" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-        </div>
-      </div>
-
-      <!-- Expert -->
-      <div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
-        <div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Expert</div>
-        <div style="font-size:1.3rem;font-weight:700;color:#4B4439;line-height:1;" id="tp-pct-xp">0%</div>
-        <div style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;" id="tp-cnt-xp">0 / 0</div>
-        <div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
-          <div id="tp-fill-xp" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Hidden anchors kept for JS compatibility -->
-    <span id="stat-total-checked" style="display:none;"></span>
-    <span id="stat-overall-pct"   style="display:none;"></span>
-    <span id="stat-months-left"   style="display:none;"></span>
-    <span id="stat-milestone"     style="display:none;"></span>
-
-  </div><!-- /timeline-body -->
+<button class="timeline-toggle-btn" id="tl-btn" onclick="toggleTimeline()">
+<span class="tl-toggle-label">📅 24-Month Learning Timeline</span>
+<span class="tl-toggle-sub">Mar 2026 → Mar 2028 · Countdown &amp; tier progress</span>
+<span class="tl-toggle-icon" id="tl-icon">▾</span>
+</button>
+<div class="timeline-body" id="tl-body">
+<!-- Countdown — centred -->
+<div class="tl-countdown" style="flex-direction:column;align-items:center;text-align:center;gap:10px;">
+<div>
+<div class="tl-cd-label" style="margin-bottom:2px;">Countdown to Target · 26 March 2028</div>
+<div class="tl-cd-target"><span id="tl-elapsed-pct" style="color:#0FB6DF;font-weight:700;">0%</span> of journey elapsed</div>
 </div>
-
+<div class="tl-cd-digits" style="justify-content:center;">
+<div class="tl-digit"><span class="n" id="tl-days">—</span><span class="u">Days</span></div>
+<div class="tl-sep">:</div>
+<div class="tl-digit"><span class="n" id="tl-hrs">—</span><span class="u">Hrs</span></div>
+<div class="tl-sep">:</div>
+<div class="tl-digit"><span class="n" id="tl-min">—</span><span class="u">Min</span></div>
+<div class="tl-sep">:</div>
+<div class="tl-digit"><span class="n" id="tl-sec">—</span><span class="u">Sec</span></div>
+</div>
+</div>
+<!-- Consolidated bar chart -->
+<div class="tl-chart">
+<!-- Single shared ruler -->
+<div style="display:flex;margin-bottom:4px;padding-left:52px;">
+<div class="tl-ruler" id="ruler-dev" style="flex:1;display:flex;"></div>
+</div>
+<!-- Single unified bar -->
+<div style="position:relative;">
+<!-- TODAY line -->
+<div class="tl-today" id="today-dev"></div>
+<!-- One bar: Fundamentals | Experienced | Expert -->
+<div class="tl-track" id="track-dev" style="height:32px;">
+<div class="tl-seg seg-fund-c" id="dev-fund" style="width:16.67%">
+<div class="tl-seg-fill" id="fill-dev-fund"></div>
+</div>
+<div class="tl-seg seg-exp-c" id="dev-exp" style="width:41.67%">
+<div class="tl-seg-fill" id="fill-dev-exp"></div>
+</div>
+<div class="tl-seg seg-xp-c" id="sm-xp" style="width:41.66%">
+<div class="tl-seg-fill" id="fill-sm-xp"></div>
+</div>
+</div>
+<!-- Phase labels — spaced to avoid overlap -->
+<div style="position:relative;height:16px;margin-top:5px;font-size:0.58rem;color:#576475;font-weight:600;">
+<span style="position:absolute;left:0%;">Fundamentals</span>
+<span style="position:absolute;left:20%;">Experienced</span>
+<span style="position:absolute;left:60%;">Expert</span>
+</div>
+</div>
+<!-- Role stat cards — 4 columns -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;">
+<!-- Team -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Team</div>
+<div id="stat-team-pct" style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;">0%</div>
+<div id="stat-team" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0/0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="stat-team-bar" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+<!-- Dev -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #0FB6DF;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#0FB6DF;margin-bottom:6px;">Dev</div>
+<div id="stat-dev-pct" style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;">0%</div>
+<div id="stat-dev" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0/0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="stat-dev-bar" style="height:100%;background:#0FB6DF;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+<!-- PO -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">PO</div>
+<div id="stat-po-pct" style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;">0%</div>
+<div id="stat-po" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0/0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="stat-po-bar" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+<!-- SM -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">SM</div>
+<div id="stat-sm-pct" style="font-size:1.3rem;font-weight:700;color:#2C2C34;line-height:1;">0%</div>
+<div id="stat-sm" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0/0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="stat-sm-bar" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+</div>
+</div><!-- /tl-chart -->
+<!-- 3-column tier cards -->
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;">
+<!-- Fundamentals -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #002855;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#002855;margin-bottom:6px;">Fundamentals</div>
+<div id="tp-pct-fund" style="font-size:1.3rem;font-weight:700;color:#002855;line-height:1;">0%</div>
+<div id="tp-cnt-fund" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0 / 0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="tp-fill-fund" style="height:100%;background:#002855;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+<!-- Experienced -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #576475;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#576475;margin-bottom:6px;">Experienced</div>
+<div id="tp-pct-exp" style="font-size:1.3rem;font-weight:700;color:#576475;line-height:1;">0%</div>
+<div id="tp-cnt-exp" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0 / 0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="tp-fill-exp" style="height:100%;background:#576475;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+<!-- Expert -->
+<div style="background:#fff;border:1px solid #E1DFDB;border-top:3px solid #4B4439;border-radius:5px;padding:10px 12px;">
+<div style="font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#4B4439;margin-bottom:6px;">Expert</div>
+<div id="tp-pct-xp" style="font-size:1.3rem;font-weight:700;color:#4B4439;line-height:1;">0%</div>
+<div id="tp-cnt-xp" style="font-size:0.62rem;color:#576475;margin-top:2px;margin-bottom:8px;">0 / 0</div>
+<div style="height:4px;background:#E1DFDB;border-radius:2px;overflow:hidden;">
+<div id="tp-fill-xp" style="height:100%;background:#4B4439;border-radius:2px;width:0%;transition:width 0.4s;"></div>
+</div>
+</div>
+</div>
+<!-- Hidden anchors kept for JS compatibility -->
+<span id="stat-total-checked" style="display:none;"></span>
+<span id="stat-overall-pct" style="display:none;"></span>
+<span id="stat-months-left" style="display:none;"></span>
+<span id="stat-milestone" style="display:none;"></span>
+</div><!-- /timeline-body -->
+</div>
 <!-- Role filter -->
 <div class="role-nav">
-  <div class="filter-group">
-    <label class="filter-check"><input type="checkbox" id="filterTeam" onchange="updateProgress()"><span>Team</span></label>
-    <label class="filter-check"><input type="checkbox" id="filterSM" onchange="updateProgress()"><span>Scrum Master</span></label>
-    <label class="filter-check"><input type="checkbox" id="filterPO" onchange="updateProgress()"><span>Product Owner</span></label>
-    <label class="filter-check"><input type="checkbox" id="filterDev" onchange="updateProgress()"><span>Developers</span></label>
-  </div>
-  <div class="filter-divider"></div>
-  <div class="filter-group">
-    <label class="filter-check"><input type="checkbox" id="filterFund" onchange="updateProgress()"><span>Fundamentals</span></label>
-    <label class="filter-check"><input type="checkbox" id="filterExp" onchange="updateProgress()"><span>Experienced</span></label>
-    <label class="filter-check"><input type="checkbox" id="filterXp" onchange="updateProgress()"><span>Expert</span></label>
-  </div>
-  <div class="checked-only-wrap" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
-    <label class="filter-check"><input type="checkbox" id="checkedOnlyToggle" onchange="updateProgress()"><span>Checked only</span></label>
-    <label class="filter-check"><input type="checkbox" id="inProgressOnlyToggle" onchange="updateProgress()"><span>In Progress only</span></label>
-  </div>
+<div class="filter-group">
+<label class="filter-check"><input id="filterTeam" onchange="updateProgress()" type="checkbox"/><span>Team</span></label>
+<label class="filter-check"><input id="filterSM" onchange="updateProgress()" type="checkbox"/><span>Scrum Master</span></label>
+<label class="filter-check"><input id="filterPO" onchange="updateProgress()" type="checkbox"/><span>Product Owner</span></label>
+<label class="filter-check"><input id="filterDev" onchange="updateProgress()" type="checkbox"/><span>Developers</span></label>
 </div>
-
+<div class="filter-divider"></div>
+<div class="filter-group">
+<label class="filter-check"><input id="filterFund" onchange="updateProgress()" type="checkbox"/><span>Fundamentals</span></label>
+<label class="filter-check"><input id="filterExp" onchange="updateProgress()" type="checkbox"/><span>Experienced</span></label>
+<label class="filter-check"><input id="filterXp" onchange="updateProgress()" type="checkbox"/><span>Expert</span></label>
+</div>
+<div class="checked-only-wrap" style="display:flex;gap:14px;align-items:center;justify-content:flex-start;">
+<label class="filter-check">
+<input id="inProgressOnlyToggle" onchange="updateProgress()" type="checkbox"/>
+<span>Filter In Progress only</span>
+</label>
+<label class="filter-check">
+<input id="checkedOnlyToggle" onchange="updateProgress()" type="checkbox"/>
+<span>Filter Completed Only</span>
+</label>
+</div>
+</div>
 <!-- Progress -->
 <div class="progress-wrap">
-  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill"></div></div>
-  <div class="progress-label" id="progLabel">0 / 0</div>
+<div class="progress-bar-bg"><div class="progress-bar-fill" id="progFill"></div></div>
+<div class="progress-label" id="progLabel">0 / 0</div>
 </div>
-
 <div class="container">
-
-  <!-- ──────────────── FUNDAMENTALS ──────────────── -->
-  <div class="tier tier-fundamentals" id="tier-fund">
-    <div class="tier-header" onclick="toggleTier('fund')">
-      <div class="tier-badge">Fundamentals</div>
-      <div class="tier-title">The Foundation Every Agilist Must Own</div>
-      <div class="tier-subtitle">Start here — no shortcuts. Psychological safety precedes all else.</div>
-      <div class="tier-toggle open" id="tog-fund">▾</div>
-    </div>
-    <div class="tier-body" id="body-fund">
-
-      <!-- Agile Manifesto & Values -->
-      <div class="cat-group">
-        <div class="cat-title">Agile Manifesto &amp; Values</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f1_ip" aria-label="Mark in progress"><input type="checkbox" id="f1"><label for="f1">Know the 4 values of the Agile Manifesto by heart — not by rote, but by meaning</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f2_ip" aria-label="Mark in progress"><input type="checkbox" id="f2"><label for="f2">Understand all 12 Agile Manifesto principles and connect each to real delivery challenges</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f3_ip" aria-label="Mark in progress"><input type="checkbox" id="f3"><label for="f3">Explain why "working software over documentation" doesn't mean no documentation</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f4_ip" aria-label="Mark in progress"><input type="checkbox" id="f4"><label for="f4">Recognize when the team's actions contradict the Manifesto values they claim to uphold</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Scrum Fundamentals -->
-      <div class="cat-group">
-        <div class="cat-title">Scrum Framework</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f5_ip" aria-label="Mark in progress"><input type="checkbox" id="f5"><label for="f5">Name the 3 empirical pillars: Transparency, Inspection, Adaptation — and explain how they depend on each other</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f6_ip" aria-label="Mark in progress"><input type="checkbox" id="f6"><label for="f6">Live the 5 Scrum Values: Commitment, Focus, Openness, Respect, Courage</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f7_ip" aria-label="Mark in progress"><input type="checkbox" id="f7"><label for="f7">Understand the purpose and timebox of all 5 Scrum events</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f8_ip" aria-label="Mark in progress"><input type="checkbox" id="f8"><label for="f8">Distinguish the 3 Scrum roles and their accountabilities (not job titles)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f9_ip" aria-label="Mark in progress"><input type="checkbox" id="f9"><label for="f9">Know the 3 Scrum artifacts and their associated commitments (Product Goal, Sprint Goal, DoD)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f10_ip" aria-label="Mark in progress"><input type="checkbox" id="f10"><label for="f10">Facilitate every Scrum event without owning the outcome — serve, don't manage</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="f11_ip" aria-label="Mark in progress"><input type="checkbox" id="f11"><label for="f11">Order the Product Backlog by value, risk, and dependency — not loudest stakeholder</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f12_ip" aria-label="Mark in progress"><input type="checkbox" id="f12"><label for="f12">Self-organize around the Sprint Goal — the plan is yours to create and adapt</label><span class="tag tag-dev">Dev</span>
-        </div>
-      </div>
-
-      <!-- Psychological Safety -->
-      <div class="cat-group">
-        <div class="cat-title">Psychological Safety</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f13_ip" aria-label="Mark in progress"><input type="checkbox" id="f13"><label for="f13">Understand Edmondson's 1999 definition: psychological safety is belief that risk-taking won't be punished</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f14_ip" aria-label="Mark in progress"><input type="checkbox" id="f14"><label for="f14">Identify the signs of a psychologically unsafe team (silenced voices, blame games, hidden impediments)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f15_ip" aria-label="Mark in progress"><input type="checkbox" id="f15"><label for="f15">Actively normalise asking for help — model vulnerability in every Sprint Retrospective</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f16_ip" aria-label="Mark in progress"><input type="checkbox" id="f16"><label for="f16">Promote a no-blame culture where mistakes are learning opportunities, not failure events</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f17_ip" aria-label="Mark in progress"><input type="checkbox" id="f17"><label for="f17">Ensure equal speaking time in retros — imbalance is a psychological safety signal, not just a facilitation issue</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- User Stories -->
-      <div class="cat-group">
-        <div class="cat-title">User Stories &amp; Backlog</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f18_ip" aria-label="Mark in progress"><input type="checkbox" id="f18"><label for="f18">Write stories using the 3 C's: Card, Conversation, Confirmation (Jeffries 2001)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f19_ip" aria-label="Mark in progress"><input type="checkbox" id="f19"><label for="f19">Evaluate stories against INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable (Wake 2003)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="f20_ip" aria-label="Mark in progress"><input type="checkbox" id="f20"><label for="f20">Link every story to a Feature; understand why parent context drives prioritisation</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f21_ip" aria-label="Mark in progress"><input type="checkbox" id="f21"><label for="f21">Know the difference between a Definition of Ready (entry) and a Definition of Done (exit)</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Basic Metrics -->
-      <div class="cat-group">
-        <div class="cat-title">Agile Metrics — First Steps</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f22_ip" aria-label="Mark in progress"><input type="checkbox" id="f22"><label for="f22">Understand Throughput: how many items the team completes per sprint</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f23_ip" aria-label="Mark in progress"><input type="checkbox" id="f23"><label for="f23">Understand Cycle Time vs Lead Time — CT starts when work begins, LT starts when work is requested</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f24_ip" aria-label="Mark in progress"><input type="checkbox" id="f24"><label for="f24">Calculate Sprint Predictability: Closed ÷ Final Sprint Scope (committed + mid-sprint additions)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f25_ip" aria-label="Mark in progress"><input type="checkbox" id="f25"><label for="f25">Recognise that velocity is a planning tool — not a performance target or team ranking tool</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Kanban Basics -->
-      <div class="cat-group">
-        <div class="cat-title">Kanban Basics</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f26_ip" aria-label="Mark in progress"><input type="checkbox" id="f26"><label for="f26">Visualise your workflow: every active work item must be visible on the board</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f27_ip" aria-label="Mark in progress"><input type="checkbox" id="f27"><label for="f27">Understand WIP limits and why exceeding them creates queues — not productivity</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f28_ip" aria-label="Mark in progress"><input type="checkbox" id="f28"><label for="f28">Know that WIP includes all active statuses: In Progress, In Review, In Testing, Blocked, Ready for Release</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f29_ip" aria-label="Mark in progress"><input type="checkbox" id="f29"><label for="f29">Coach the team to finish items before starting new ones — "Stop Starting, Start Finishing"</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- User Stories in Practice -->
-      <div class="cat-group">
-        <div class="cat-title">User Stories in Practice</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f30_ip" aria-label="Mark in progress"><input type="checkbox" id="f30"><label for="f30">Write User Stories in the format "As a [role], I want [goal], so that [value]" — the "so that" is not optional; it anchors every story to business value</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f31_ip" aria-label="Mark in progress"><input type="checkbox" id="f31"><label for="f31">Understand why teams use Stories, not Tasks — Stories describe value to a user; Tasks describe technical work for the team. A backlog of tasks is a feature factory waiting to happen</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f32_ip" aria-label="Mark in progress"><input type="checkbox" id="f32"><label for="f32">Split stories vertically — each story should deliver a thin, testable slice of value end-to-end, not a horizontal layer (e.g. "only the UI" or "only the database")</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f33_ip" aria-label="Mark in progress"><input type="checkbox" id="f33"><label for="f33">Write Acceptance Criteria collaboratively with the team before Sprint Planning — criteria written alone by the PO after planning are not a shared understanding, they are a specification</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Definition of Ready & Done -->
-      <div class="cat-group">
-        <div class="cat-title">Definition of Ready &amp; Done</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f34_ip" aria-label="Mark in progress"><input type="checkbox" id="f34"><label for="f34">Create and maintain a Definition of Ready (DoR) as a team — a story is Ready when it is small enough, understood by everyone, and has clear Acceptance Criteria before Sprint Planning begins</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f35_ip" aria-label="Mark in progress"><input type="checkbox" id="f35"><label for="f35">Create and maintain a Definition of Done (DoD) as a team — Done means releasable, not "code complete". Every increment must meet the DoD before it is counted as delivered</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f36_ip" aria-label="Mark in progress"><input type="checkbox" id="f36"><label for="f36">Review and update the DoD at every Retrospective — a DoD that never changes is a DoD the team has stopped believing in</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f37_ip" aria-label="Mark in progress"><input type="checkbox" id="f37"><label for="f37">Use the DoR as a coaching tool, not a gate — if stories consistently fail the DoR, the problem is upstream in refinement, not at the door of Sprint Planning</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Team Agreements -->
-      <div class="cat-group">
-        <div class="cat-title">Team Agreements</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f38_ip" aria-label="Mark in progress"><input type="checkbox" id="f38"><label for="f38">Facilitate a Team Agreement workshop at team formation and revisit it every PI — agreements on communication, working hours, escalation, and collaboration norms prevent the conflicts that retrospectives can't fix</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f39_ip" aria-label="Mark in progress"><input type="checkbox" id="f39"><label for="f39">Make Team Agreements visible — post them on the team board or Confluence page. Agreements that exist only in people's heads are not agreements, they are assumptions</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f40_ip" aria-label="Mark in progress"><input type="checkbox" id="f40"><label for="f40">Include psychological safety norms in Team Agreements explicitly — e.g. "We raise problems early", "We separate the person from the problem", "We ask for help without shame"</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Jira & Agile Metrics Tools -->
-      <div class="cat-group">
-        <div class="cat-title">Jira &amp; Agile Metrics Tools</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f41_ip" aria-label="Mark in progress"><input type="checkbox" id="f41"><label for="f41">Use JQL (Jira Query Language) to filter and organise work — know at minimum: project, status, assignee, sprint, and label filters; build saved filters your team uses every daily</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f42_ip" aria-label="Mark in progress"><input type="checkbox" id="f42"><label for="f42">Build and use a Great Gadgets (StonikByte) dashboard in Jira for your team — at minimum: Throughput, Cycle Time, and WIP displayed in one place and reviewed every Sprint</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="f43_ip" aria-label="Mark in progress"><input type="checkbox" id="f43"><label for="f43">Use the Great Gadgets Agile Metrics Dashboard in every Sprint Review — metrics without a cadence are decoration; metrics reviewed every sprint become coaching conversations</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="f44_ip" aria-label="Mark in progress"><input type="checkbox" id="f44"><label for="f44">Know how to read your team's Jira board as a flow signal — items stuck in a column for more than 2 days are not a status update problem, they are an impediment waiting to be named</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Professional Developer Skills (PSD) -->
-      <div class="cat-group">
-        <div class="cat-title">Professional Developer Skills <span style="font-weight:400;color:#576475;font-size:0.72rem;">— PSD</span></div>
-
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f45_ip" aria-label="Mark in progress"><input type="checkbox" id="f45"><label for="f45">Understand your accountability as a Developer: you are responsible for creating a usable Increment every Sprint — not just writing code, but delivering done, working software</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f46_ip" aria-label="Mark in progress"><input type="checkbox" id="f46"><label for="f46">Practice cross-functional self-management: the team collectively owns all the skills needed to deliver — no hand-offs, no "that's not my job"</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f47_ip" aria-label="Mark in progress"><input type="checkbox" id="f47"><label for="f47">Apply continuous integration — merge code at least daily, keep the build green, and treat a broken build as the team's highest priority to fix</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f48_ip" aria-label="Mark in progress"><input type="checkbox" id="f48"><label for="f48">Write automated tests as part of the Definition of Done — not as an afterthought. Tests that run manually are not a safety net, they are a debt</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f49_ip" aria-label="Mark in progress"><input type="checkbox" id="f49"><label for="f49">Participate actively in Backlog Refinement — Developers bring technical insight into sizing, splitting, and dependency identification; the PO brings the value; both are needed to write a good story</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f50_ip" aria-label="Mark in progress"><input type="checkbox" id="f50"><label for="f50">Understand and own the Definition of Done — you created it, you enforce it. "Done" means releasable, integrated, tested, and documented to the agreed standard</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f51_ip" aria-label="Mark in progress"><input type="checkbox" id="f51"><label for="f51">Raise impediments immediately — never silently absorb a blocker for days. Surface it at the Daily Sync so the team and SM can act</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f52_ip" aria-label="Mark in progress"><input type="checkbox" id="f52"><label for="f52">Manage technical debt actively — allocate at least 20% of each Sprint to refactoring and quality improvement; technical debt ignored is velocity borrowed from the future</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f53_ip" aria-label="Mark in progress"><input type="checkbox" id="f53"><label for="f53">Collaborate on design and architecture — good architecture emerges from the team, not from a solo architect handing down decisions. Make design a conversation, not a document</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f54_ip" aria-label="Mark in progress"><input type="checkbox" id="f54"><label for="f54">Forecast Sprint capacity honestly — commit to what the team can genuinely complete to Done, not what looks impressive. An over-committed Sprint produces undone work, not productivity</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f55_ip" aria-label="Mark in progress"><input type="checkbox" id="f55"><label for="f55">Make work visible on the team board — update story status daily. A board that doesn't reflect reality is a planning tool that nobody can trust</label><span class="tag tag-dev">Dev</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="f56_ip" aria-label="Mark in progress"><input type="checkbox" id="f56"><label for="f56">Know how to split a story too large for one Sprint — use SPIDR (Spike, Path, Interface, Data, Rules) or similar splitting patterns to create stories that fit and still deliver value</label><span class="tag tag-dev">Dev</span>
-        </div>
-      </div>
-
-    </div><!-- /tier-body -->
-  </div><!-- /tier-fundamentals -->
-
-
-  <!-- ──────────────── EXPERIENCED ──────────────── -->
-  <div class="tier tier-experienced" id="tier-exp">
-    <div class="tier-header" onclick="toggleTier('exp')">
-      <div class="tier-badge">Experienced</div>
-      <div class="tier-title">From Understanding to Deliberate Practice</div>
-      <div class="tier-subtitle">Patterns, metrics, and scaled agile start here.</div>
-      <div class="tier-toggle open" id="tog-exp">▾</div>
-    </div>
-    <div class="tier-body" id="body-exp">
-
-      <!-- SAFe & Scaling -->
-      <div class="cat-group">
-        <div class="cat-title">SAFe &amp; ART Execution</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e1_ip" aria-label="Mark in progress"><input type="checkbox" id="e1"><label for="e1">Understand the purpose of a PI Planning event and the ART's cadence-based alignment</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e2_ip" aria-label="Mark in progress"><input type="checkbox" id="e2"><label for="e2">Facilitate PI Planning for your team: sequence stories, craft PI Objectives, flag risks</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e3_ip" aria-label="Mark in progress"><input type="checkbox" id="e3"><label for="e3">Contribute to the ART Vision and Roadmap; keep Team Backlog aligned with ART priorities</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e4_ip" aria-label="Mark in progress"><input type="checkbox" id="e4"><label for="e4">Participate actively in ART Sync and PO Sync to surface cross-team dependencies early</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e5_ip" aria-label="Mark in progress"><input type="checkbox" id="e5"><label for="e5">Know the 5 SM/TC responsibilities: PI Facilitation, Iteration Execution, Flow, High-Performing Teams, ART Performance</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e6_ip" aria-label="Mark in progress"><input type="checkbox" id="e6"><label for="e6">Know the 5 PO responsibilities: Customer Connection, Vision & Roadmap, Backlog Management, Team Support, Feedback Loop</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e7_ip" aria-label="Mark in progress"><input type="checkbox" id="e7"><label for="e7">Understand the Innovation & Planning (IP) Iteration and how to use it without wasting it</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Flow Metrics -->
-      <div class="cat-group">
-        <div class="cat-title">Flow Metrics (SAFe 6 Flavour)</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e8_ip" aria-label="Mark in progress"><input type="checkbox" id="e8"><label for="e8">Apply Little's Law: L = λW — relate WIP, Throughput, and Lead Time in a coherent model</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e9_ip" aria-label="Mark in progress"><input type="checkbox" id="e9"><label for="e9">Track all 6 SAFe Flow Metrics: Distribution, Velocity, Time, Load, Efficiency, Predictability</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e10_ip" aria-label="Mark in progress"><input type="checkbox" id="e10"><label for="e10">Distinguish Flow Efficiency (active time ÷ flow time) and use it to expose wait time waste</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e11_ip" aria-label="Mark in progress"><input type="checkbox" id="e11"><label for="e11">Run what-if scenarios: "If we reduce WIP by 2, what happens to Cycle Time?" — use data, not opinion</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e12_ip" aria-label="Mark in progress"><input type="checkbox" id="e12"><label for="e12">Understand that Little's Law is boundary-agnostic: apply it at story, feature, or ART level by moving the system boundary</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Antipatterns -->
-      <div class="cat-group">
-        <div class="cat-title">Agile Antipatterns</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e13_ip" aria-label="Mark in progress"><input type="checkbox" id="e13"><label for="e13">Identify "Output Focus" antipattern: the team ships features but ignores outcome-level feedback</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e14_ip" aria-label="Mark in progress"><input type="checkbox" id="e14"><label for="e14">Detect "Mid-Sprint Scope Addition" and know how to negotiate it using Sprint Goal language</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e15_ip" aria-label="Mark in progress"><input type="checkbox" id="e15"><label for="e15">Name and coach against "Shadow Sprint Backlog" — hidden work destroys transparency and inspect/adapt</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e16_ip" aria-label="Mark in progress"><input type="checkbox" id="e16"><label for="e16">Recognise "No WIP Limit" as a systemic antipattern, not an individual discipline issue</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e17_ip" aria-label="Mark in progress"><input type="checkbox" id="e17"><label for="e17">Use Wolpers (2024) antipattern vocabulary in retrospective coaching — name the pattern, not the person</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e18_ip" aria-label="Mark in progress"><input type="checkbox" id="e18"><label for="e18">Connect Environment Lock and Dependency Drag antipatterns to cycle time degradation with data</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Retrospectives -->
-      <div class="cat-group">
-        <div class="cat-title">Retrospectives &amp; Continuous Improvement</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e19_ip" aria-label="Mark in progress"><input type="checkbox" id="e19"><label for="e19">Design retrospectives that surface real issues — rotate formats, avoid comfort-zone templates</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e20_ip" aria-label="Mark in progress"><input type="checkbox" id="e20"><label for="e20">Drive Kaizen: every retro must produce at least one actionable improvement with an owner and due date</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e21_ip" aria-label="Mark in progress"><input type="checkbox" id="e21"><label for="e21">Intervene constructively when one or two voices dominate the retrospective — it is a safety signal</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e22_ip" aria-label="Mark in progress"><input type="checkbox" id="e22"><label for="e22">Track improvement stories across sprints — a retro with no follow-up is a retro that didn't happen</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Advanced Kanban -->
-      <div class="cat-group">
-        <div class="cat-title">Kanban — Flow Thinking</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e23_ip" aria-label="Mark in progress"><input type="checkbox" id="e23"><label for="e23">Read and interpret a Cumulative Flow Diagram (CFD) to spot growing queues and blocked states</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e24_ip" aria-label="Mark in progress"><input type="checkbox" id="e24"><label for="e24">Construct correct JQL for WIP: status NOT IN (Closed, Done, "To Do", Backlog) — not just "In Progress"</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e25_ip" aria-label="Mark in progress"><input type="checkbox" id="e25"><label for="e25">Use a Scatterplot of Cycle Time to set realistic SLA targets — percentile-based, not average-based</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e26_ip" aria-label="Mark in progress"><input type="checkbox" id="e26"><label for="e26">Distinguish between SAFe Kanban Teams and Scrum Teams — know when to apply each in your ART</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Stakeholder & Transparency -->
-      <div class="cat-group">
-        <div class="cat-title">Transparency &amp; Stakeholder Collaboration</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e27_ip" aria-label="Mark in progress"><input type="checkbox" id="e27"><label for="e27">Understand that transparency enables inspection — and inspection without transparency is misleading (Scrum Guide)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e28_ip" aria-label="Mark in progress"><input type="checkbox" id="e28"><label for="e28">Run Sprint Reviews that generate real feedback, not demos that confirm what stakeholders already expect</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e29_ip" aria-label="Mark in progress"><input type="checkbox" id="e29"><label for="e29">Address leadership-level transparency gaps: use roadmaps and Sprint Reviews to make strategy visible and connected to team work</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e30_ip" aria-label="Mark in progress"><input type="checkbox" id="e30"><label for="e30">Communicate impediments upward with data and impact framing — not just status updates</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- Backlog Forensics — Wolpers 60 Questions -->
-      <div class="cat-group">
-        <div class="cat-title">Backlog Forensics <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
-
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e31_ip" aria-label="Mark in progress"><input type="checkbox" id="e31"><label for="e31">Know your Product Backlog size — if it exceeds 3–4 sprints of capacity, the PO needs support in pruning it</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e32_ip" aria-label="Mark in progress"><input type="checkbox" id="e32"><label for="e32">Check item age: any backlog item untouched for 5+ months is likely obsolete — challenge or delete it</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e33_ip" aria-label="Mark in progress"><input type="checkbox" id="e33"><label for="e33">Know your average lead time from idea → backlog → delivery: if no one can answer this, the system is invisible</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e34_ip" aria-label="Mark in progress"><input type="checkbox" id="e34"><label for="e34">Identify backlog items no current team member recognises — re-refine or delete them before they consume capacity</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="e35_ip" aria-label="Mark in progress"><input type="checkbox" id="e35"><label for="e35">Ask Wolpers' onboarding diagnostic: backlog size, item age, lead time, velocity, unfinished stories — in a 60-min timebox</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e36_ip" aria-label="Mark in progress"><input type="checkbox" id="e36"><label for="e36">Know your velocity for the last 3 sprints — and understand why it varies, not just what it averages</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e37_ip" aria-label="Mark in progress"><input type="checkbox" id="e37"><label for="e37">Understand your typical Sprint Backlog composition: one large item, some medium, a few small — this is the productivity sweet spot</label><span class="tag tag-all">Team</span>
-        </div>
-      </div>
-
-      <!-- PO Vision Value Validation — McGreal/Jocham -->
-      <div class="cat-group">
-        <div class="cat-title">Product Discovery <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
-
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e38_ip" aria-label="Mark in progress"><input type="checkbox" id="e38"><label for="e38">Own the Three Vs: Vision (transparency), Value (inspect), Validation (adapt) — these are the PO's strategic engine</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e39_ip" aria-label="Mark in progress"><input type="checkbox" id="e39"><label for="e39">Articulate a clear Product Vision that the whole team can act on without direct orders — it creates autonomy, not dependency</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e40_ip" aria-label="Mark in progress"><input type="checkbox" id="e40"><label for="e40">Distinguish outcome from output: a valuable sprint ships pearls (value) onto the thread (vision) — not just completed tickets</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="e41_ip" aria-label="Mark in progress"><input type="checkbox" id="e41"><label for="e41">Use MVP patterns deliberately: Promotional, Mining, Landing Page, Wizard of Oz, or Single-Feature — chosen for the hypothesis being tested</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e42_ip" aria-label="Mark in progress"><input type="checkbox" id="e42"><label for="e42">Allocate meaningful time to user research — less than 10% is a red flag; 50% is excellent (McGreal & Jocham)</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e43_ip" aria-label="Mark in progress"><input type="checkbox" id="e43"><label for="e43">Involve developers in product discovery as early as possible — they prevent technically unviable solutions before they reach the Sprint</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="e44_ip" aria-label="Mark in progress"><input type="checkbox" id="e44"><label for="e44">Guard the backlog from pet projects — the ability to say "no" with data is a core PO accountability, not a management responsibility</label><span class="tag tag-po">PO</span>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /tier-experienced -->
-
-
-  <!-- ──────────────── EXPERT ──────────────── -->
-  <div class="tier tier-expert" id="tier-xp">
-    <div class="tier-header" onclick="toggleTier('xp')">
-      <div class="tier-badge">Expert</div>
-      <div class="tier-title">Systems Thinking &amp; Organisational Agility</div>
-      <div class="tier-subtitle">Coach beyond the team — influence the system that shapes the team.</div>
-      <div class="tier-toggle open" id="tog-xp">▾</div>
-    </div>
-    <div class="tier-body" id="body-xp">
-
-      <!-- Coaching Mastery -->
-      <div class="cat-group">
-        <div class="cat-title">Coaching &amp; Servant Leadership</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x1_ip" aria-label="Mark in progress"><input type="checkbox" id="x1"><label for="x1">Coach across the full Agile Coach Stance spectrum: teacher, mentor, facilitator, coach — and know when to switch</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x2_ip" aria-label="Mark in progress"><input type="checkbox" id="x2"><label for="x2">Understand the Agile Coach to Chief Agility Officer growth path — identify where you currently sit on it and name one concrete step toward the next level</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x3_ip" aria-label="Mark in progress"><input type="checkbox" id="x3"><label for="x3">Distinguish high-performing team traits (Google Project Aristotle): psychological safety, dependability, structure, meaning, impact</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x4_ip" aria-label="Mark in progress"><input type="checkbox" id="x4"><label for="x4">Address systemic disempowerment: when teams can't adapt, the organisation is the impediment — not the team</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x5_ip" aria-label="Mark in progress"><input type="checkbox" id="x5"><label for="x5">Run effective Inspect & Adapt workshops at ART level — problem-solving, not post-mortems</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Probabilistic Forecasting -->
-      <div class="cat-group">
-        <div class="cat-title">Probabilistic Forecasting</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x6_ip" aria-label="Mark in progress"><input type="checkbox" id="x6"><label for="x6">Run Monte Carlo Sprint Simulations (10,000 runs): communicate delivery confidence as probability ranges, not point estimates</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x7_ip" aria-label="Mark in progress"><input type="checkbox" id="x7"><label for="x7">Understand why historical Throughput is a superior planning input to story point estimation</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x8_ip" aria-label="Mark in progress"><input type="checkbox" id="x8"><label for="x8">Use predictability data to have honest PI commitment conversations with Product Management</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x9_ip" aria-label="Mark in progress"><input type="checkbox" id="x9"><label for="x9">Build and maintain a Sprint Predictability Tracker — spot capacity erosion, scope creep, and trend shifts before they become crises</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Dependency & Architecture -->
-      <div class="cat-group">
-        <div class="cat-title">Dependencies &amp; Technical Agility</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x10_ip" aria-label="Mark in progress"><input type="checkbox" id="x10"><label for="x10">Identify where dependencies break down: PI Planning boards vs Jira entry is the most common failure point</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x11_ip" aria-label="Mark in progress"><input type="checkbox" id="x11"><label for="x11">Ensure dependencies captured in PI Planning are transcribed to Jira with consistent link types — not lost in translation</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x12_ip" aria-label="Mark in progress"><input type="checkbox" id="x12"><label for="x12">Understand that independent deployments and a meaningful UAT gate are structurally incompatible without feature flags or a shared ART cadence</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x13_ip" aria-label="Mark in progress"><input type="checkbox" id="x13"><label for="x13">Coach the team to distinguish technical debt as a flow metric problem — not just a code quality problem</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Portfolio & Strategy -->
-      <div class="cat-group">
-        <div class="cat-title">Portfolio &amp; Value Stream Thinking</div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x14_ip" aria-label="Mark in progress"><input type="checkbox" id="x14"><label for="x14">Prepare a value stream view of team-level flow metrics and present it to at least one senior stakeholder — make value creation and waste visible in language they use</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x15_ip" aria-label="Mark in progress"><input type="checkbox" id="x15"><label for="x15">Influence ART Backlog prioritisation through data — not advocacy alone</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x16_ip" aria-label="Mark in progress"><input type="checkbox" id="x16"><label for="x16">Understand Lean Portfolio Management (LPM) — how portfolio-level decisions shape team-level capacity</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x17_ip" aria-label="Mark in progress"><input type="checkbox" id="x17"><label for="x17">Use the SAFe Coaches Handbook RTE readiness model to benchmark ART health — not just team health</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Culture & Organisation -->
-      <div class="cat-group">
-        <div class="cat-title">Culture &amp; Organisational Change</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x18_ip" aria-label="Mark in progress"><input type="checkbox" id="x18"><label for="x18">Recognise that need-to-know information cultures undermine agile transparency at source — address it at leadership level</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x19_ip" aria-label="Mark in progress"><input type="checkbox" id="x19"><label for="x19">Facilitate cross-team retrospectives and Communities of Practice — improvement doesn't stop at team boundaries</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x20_ip" aria-label="Mark in progress"><input type="checkbox" id="x20"><label for="x20">Apply Tuckman's Stages of Team Dynamics to diagnose where a team is — and what they need from you next</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x21_ip" aria-label="Mark in progress"><input type="checkbox" id="x21"><label for="x21">Complete SASM (SAFe Advanced Scrum Master) training — treat it as the start of systems-level coaching competency, not the end</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x22_ip" aria-label="Mark in progress"><input type="checkbox" id="x22"><label for="x22">Complete SAFe POPM training — the certification marks the beginning of the competency journey, not its completion; apply it across at least two PIs</label><span class="tag tag-po">PO</span>
-        </div>
-      </div>
-
-      <!-- Metrics Mastery -->
-      <div class="cat-group">
-        <div class="cat-title">Metrics Mastery</div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x23_ip" aria-label="Mark in progress"><input type="checkbox" id="x23"><label for="x23">Use rolling averages and trend lines — never make decisions from a single sprint's data</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x24_ip" aria-label="Mark in progress"><input type="checkbox" id="x24"><label for="x24">Build a coherent metrics dashboard: Throughput + WIP + Cycle Time + Predictability + Flow Efficiency — all in one story</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x25_ip" aria-label="Mark in progress"><input type="checkbox" id="x25"><label for="x25">Explain the difference between metrics that measure team performance and metrics that improve team behaviour — coach teams to own the latter</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x26_ip" aria-label="Mark in progress"><input type="checkbox" id="x26"><label for="x26">Integrate Great Gadgets (StonikByte) flow metrics with Jira data — know which JQL drives which metric and why</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- EBM — McGreal/Jocham Expert Level -->
-      <div class="cat-group">
-        <div class="cat-title">Evidence-Based Management <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
-
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x27_ip" aria-label="Mark in progress"><input type="checkbox" id="x27"><label for="x27">Apply the 3 EBM Key Value Areas: Current Value (what we deliver now), Time to Market (how fast), Ability to Innovate (sustainability)</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x28_ip" aria-label="Mark in progress"><input type="checkbox" id="x28"><label for="x28">Identify proxy metrics for Current Value relevant to your insurance product context — in KYC, story count is not enough; find what signals actual customer value in a regulated environment</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x29_ip" aria-label="Mark in progress"><input type="checkbox" id="x29"><label for="x29">Distinguish leading from lagging indicators — leading predict future value, lagging confirm past delivery</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x30_ip" aria-label="Mark in progress"><input type="checkbox" id="x30"><label for="x30">Make the case for tracking Ability to Innovate at ART level — quantify how much capacity goes to maintenance vs new value, and present the data to leadership; full measurement is a 36-month goal</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x31_ip" aria-label="Mark in progress"><input type="checkbox" id="x31"><label for="x31">Use evidence, not opinion, to justify backlog ordering — ROI, risk, and validated customer data outweigh stakeholder seniority</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x32_ip" aria-label="Mark in progress"><input type="checkbox" id="x32"><label for="x32">Know when to pivot vs persevere: Sprint Review feedback is the signal — treat assumptions as hypotheses until validated in the market</label><span class="tag tag-po">PO</span>
-        </div>
-      </div>
-
-      <!-- SM Onboarding Diagnostic — Wolpers 60 Questions -->
-      <div class="cat-group">
-        <div class="cat-title">SM Onboarding Diagnostic <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x33_ip" aria-label="Mark in progress"><input type="checkbox" id="x33"><label for="x33">When joining a new team, prepare a structured 60-min diagnostic: backlog health, metrics, technical debt, and team challenges — before forming any opinions</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x34_ip" aria-label="Mark in progress"><input type="checkbox" id="x34"><label for="x34">Ask the PO: What is your product vision? How do you learn about new requirements? How much time goes to user research? — these reveal discovery maturity</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x35_ip" aria-label="Mark in progress"><input type="checkbox" id="x35"><label for="x35">Ask developers: Who created the DoD? What is the technical debt level? How much sprint capacity goes to refactoring? — 20% is the minimum health signal</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x36_ip" aria-label="Mark in progress"><input type="checkbox" id="x36"><label for="x36">Ask the team: How many stories are typically unfinished per sprint, and why? Regularly missing Sprint Goals is a critical coaching signal — not a capacity problem</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x37_ip" aria-label="Mark in progress"><input type="checkbox" id="x37"><label for="x37">Close every onboarding session with an open question: "What are the 3 main challenges the team faces today?" — use the answers to seed the next retrospective</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- SM Mastery — Geoff Watts -->
-      <div class="cat-group">
-        <div class="cat-title">SM Mastery: Good → Great <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Watts</span></div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x38_ip" aria-label="Mark in progress"><input type="checkbox" id="x38"><label for="x38">A good SM grasps the responsibilities of the role. A great SM grasps the skills and mindset — know which one you are currently operating from</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x39_ip" aria-label="Mark in progress"><input type="checkbox" id="x39"><label for="x39">A good SM will be indispensable to a team. A great SM becomes both dispensable and wanted — the team functions without you, and still chooses to work with you</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x40_ip" aria-label="Mark in progress"><input type="checkbox" id="x40"><label for="x40">A good SM maintains team harmony. A great SM guides a team through disharmony to reach a new level — conflict is a signal, not a failure</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x41_ip" aria-label="Mark in progress"><input type="checkbox" id="x41"><label for="x41">Master the power of silence in facilitation — when you feel the urge to speak, wait a little longer; the team fills the space with what actually matters</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x42_ip" aria-label="Mark in progress"><input type="checkbox" id="x42"><label for="x42">Hold the RE-TRAINED model (Watts): Respected, Enabling, Tactful, Resourceful, Alternative, Inspiring, Nurturing, Empathic, Disruptive — assess yourself honestly against each dimension</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x43_ip" aria-label="Mark in progress"><input type="checkbox" id="x43"><label for="x43">Vary your retrospective formats deliberately — a repetitive retro is a retro the team has stopped believing in; rotate formats to restore engagement</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x44_ip" aria-label="Mark in progress"><input type="checkbox" id="x44"><label for="x44">Ask for coaching feedback from your own team at least once per quarter — the act of asking increases respect regardless of the answers you receive</label><span class="tag tag-sm">SM</span>
-        </div>
-      </div>
-
-      <!-- Flow Framework — Mik Kersten: Project to Product -->
-      <div class="cat-group">
-        <div class="cat-title">Flow Framework <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Kersten</span></div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x45_ip" aria-label="Mark in progress"><input type="checkbox" id="x45"><label for="x45">Understand the shift from project mode to product mode: project management optimises for time and budget; product management optimises for value stream flow</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x46_ip" aria-label="Mark in progress"><input type="checkbox" id="x46"><label for="x46">Know the 4 Flow Item types (Kersten): Features (new value), Defects (quality), Risks (security/compliance), Debts (impediments to future delivery) — every work item maps to exactly one</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x47_ip" aria-label="Mark in progress"><input type="checkbox" id="x47"><label for="x47">Track Flow Distribution across the 4 item types — an imbalance (e.g. 80% features, 5% debt) reveals unsustainable delivery strategy before it becomes a crisis</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x48_ip" aria-label="Mark in progress"><input type="checkbox" id="x48"><label for="x48">Prepare a business-language metrics summary (Flow Velocity, Flow Time, Predictability) and present it to at least one senior stakeholder — translate delivery data into business impact, not just team performance</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x49_ip" aria-label="Mark in progress"><input type="checkbox" id="x49"><label for="x49">Treat technical debt work as a Flow Item with its own business case — never let it be invisible or deferred indefinitely as "not a feature"</label><span class="tag tag-po">PO</span>
-        </div>
-      </div>
-
-      <!-- DevOps Three Ways -->
-      <div class="cat-group">
-        <div class="cat-title">DevOps &amp; Delivery Flow <span style="font-weight:400;color:#576475;font-size:0.72rem;">— DevOps Handbook</span></div>
-
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x50_ip" aria-label="Mark in progress"><input type="checkbox" id="x50"><label for="x50">Understand the Three Ways of DevOps: Flow (left to right, fast delivery), Feedback (right to left, fast learning), Continual Learning (prevent recurrence, share knowledge)</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="team">
-          <input type="checkbox" class="in-progress-cb" id="x51_ip" aria-label="Mark in progress"><input type="checkbox" id="x51"><label for="x51">Apply small batch thinking: smaller work items reduce risk, shorten feedback loops, and make flow problems visible before they become blockers</label><span class="tag tag-all">Team</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x52_ip" aria-label="Mark in progress"><input type="checkbox" id="x52"><label for="x52">Identify and document deployment lead time as a systemic impediment with data — in a regulated insurance environment, resolution is likely a 36+ month goal; surfacing it with evidence is the 24-month target</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="dev">
-          <input type="checkbox" class="in-progress-cb" id="x53_ip" aria-label="Mark in progress"><input type="checkbox" id="x53"><label for="x53">Build quality in at the source through continuous integration — defects discovered six months later lose the cause-and-effect link needed to prevent recurrence</label><span class="tag tag-dev">Dev</span>
-        </div>
-      </div>
-
-      <!-- Coaching Stance & Self-Awareness — ICAgile + Lukassen -->
-      <div class="cat-group">
-        <div class="cat-title">Coaching Stance &amp; Customer Insight <span style="font-weight:400;color:#576475;font-size:0.72rem;">— ICAgile · Lukassen</span></div>
-
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x54_ip" aria-label="Mark in progress"><input type="checkbox" id="x54"><label for="x54">In every coaching moment, consciously choose your stance — teaching, mentoring, facilitating, or coaching — and know why you chose it (ICAgile LO 1.1.1)</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x55_ip" aria-label="Mark in progress"><input type="checkbox" id="x55"><label for="x55">Develop emotional intelligence as the underpinning of coaching: self-awareness prevents your biases from contaminating how you facilitate the team (ICAgile LO 2.1.1)</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="sm">
-          <input type="checkbox" class="in-progress-cb" id="x56_ip" aria-label="Mark in progress"><input type="checkbox" id="x56"><label for="x56">Use powerful questions, not leading questions: "What did you learn?" lands differently than "Did that work?" — open questions trigger insight, closed questions confirm assumptions</label><span class="tag tag-sm">SM</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x57_ip" aria-label="Mark in progress"><input type="checkbox" id="x57"><label for="x57">Build and maintain user personas grounded in research — know your users as people, not personas on a slide: their jobs-to-be-done, fears, and goals drive backlog ordering (Lukassen)</label><span class="tag tag-po">PO</span>
-        </div>
-        <div class="check-item role-visible" data-roles="po">
-          <input type="checkbox" class="in-progress-cb" id="x58_ip" aria-label="Mark in progress"><input type="checkbox" id="x58"><label for="x58">Stay outcome-oriented not output-oriented: a PO accountable only for delivered features is operating as a project manager — accountability extends to the value those features create (Lukassen)</label><span class="tag tag-po">PO</span>
-        </div>
-      </div>
-
-    </div>
-  </div><!-- /tier-expert -->
-
-</div><!-- /container -->
-
-<div class="reset-wrap">
-  <button class="reset-btn" onclick="resetAll()">↺ Reset all checkboxes</button>
+<!-- ──────────────── FUNDAMENTALS ──────────────── -->
+<div class="tier tier-fundamentals" id="tier-fund">
+<div class="tier-header" onclick="toggleTier('fund')">
+<div class="tier-badge">Fundamentals</div>
+<div class="tier-title">The Foundation Every Agilist Must Own</div>
+<div class="tier-subtitle">Start here — no shortcuts. Psychological safety precedes all else.</div>
+<div class="tier-toggle open" id="tog-fund">▾</div>
 </div>
-
+<div class="tier-body" id="body-fund">
+<!-- Agile Manifesto & Values -->
+<div class="cat-group">
+<div class="cat-title">Agile Manifesto &amp; Values</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f1_ip" type="checkbox"/><input id="f1" type="checkbox"/><label for="f1">Know the 4 values of the Agile Manifesto by heart — not by rote, but by meaning</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f2_ip" type="checkbox"/><input id="f2" type="checkbox"/><label for="f2">Understand all 12 Agile Manifesto principles and connect each to real delivery challenges</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f3_ip" type="checkbox"/><input id="f3" type="checkbox"/><label for="f3">Explain why "working software over documentation" doesn't mean no documentation</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f4_ip" type="checkbox"/><input id="f4" type="checkbox"/><label for="f4">Recognize when the team's actions contradict the Manifesto values they claim to uphold</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Scrum Fundamentals -->
+<div class="cat-group">
+<div class="cat-title">Scrum Framework</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f5_ip" type="checkbox"/><input id="f5" type="checkbox"/><label for="f5">Name the 3 empirical pillars: Transparency, Inspection, Adaptation — and explain how they depend on each other</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f6_ip" type="checkbox"/><input id="f6" type="checkbox"/><label for="f6">Live the 5 Scrum Values: Commitment, Focus, Openness, Respect, Courage</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f7_ip" type="checkbox"/><input id="f7" type="checkbox"/><label for="f7">Understand the purpose and timebox of all 5 Scrum events</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f8_ip" type="checkbox"/><input id="f8" type="checkbox"/><label for="f8">Distinguish the 3 Scrum roles and their accountabilities (not job titles)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f9_ip" type="checkbox"/><input id="f9" type="checkbox"/><label for="f9">Know the 3 Scrum artifacts and their associated commitments (Product Goal, Sprint Goal, DoD)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f10_ip" type="checkbox"/><input id="f10" type="checkbox"/><label for="f10">Facilitate every Scrum event without owning the outcome — serve, don't manage</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f11_ip" type="checkbox"/><input id="f11" type="checkbox"/><label for="f11">Order the Product Backlog by value, risk, and dependency — not loudest stakeholder</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f12_ip" type="checkbox"/><input id="f12" type="checkbox"/><label for="f12">Self-organize around the Sprint Goal — the plan is yours to create and adapt</label><span class="tag tag-dev">Dev</span>
+</div>
+</div>
+<!-- Psychological Safety -->
+<div class="cat-group">
+<div class="cat-title">Psychological Safety</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f13_ip" type="checkbox"/><input id="f13" type="checkbox"/><label for="f13">Understand Edmondson's 1999 definition: psychological safety is belief that risk-taking won't be punished</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f14_ip" type="checkbox"/><input id="f14" type="checkbox"/><label for="f14">Identify the signs of a psychologically unsafe team (silenced voices, blame games, hidden impediments)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f15_ip" type="checkbox"/><input id="f15" type="checkbox"/><label for="f15">Actively normalise asking for help — model vulnerability in every Sprint Retrospective</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f16_ip" type="checkbox"/><input id="f16" type="checkbox"/><label for="f16">Promote a no-blame culture where mistakes are learning opportunities, not failure events</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f17_ip" type="checkbox"/><input id="f17" type="checkbox"/><label for="f17">Ensure equal speaking time in retros — imbalance is a psychological safety signal, not just a facilitation issue</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- User Stories -->
+<div class="cat-group">
+<div class="cat-title">User Stories &amp; Backlog</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f18_ip" type="checkbox"/><input id="f18" type="checkbox"/><label for="f18">Write stories using the 3 C's: Card, Conversation, Confirmation (Jeffries 2001)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f19_ip" type="checkbox"/><input id="f19" type="checkbox"/><label for="f19">Evaluate stories against INVEST: Independent, Negotiable, Valuable, Estimable, Small, Testable (Wake 2003)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f20_ip" type="checkbox"/><input id="f20" type="checkbox"/><label for="f20">Link every story to a Feature; understand why parent context drives prioritisation</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f21_ip" type="checkbox"/><input id="f21" type="checkbox"/><label for="f21">Know the difference between a Definition of Ready (entry) and a Definition of Done (exit)</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Basic Metrics -->
+<div class="cat-group">
+<div class="cat-title">Agile Metrics — First Steps</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f22_ip" type="checkbox"/><input id="f22" type="checkbox"/><label for="f22">Understand Throughput: how many items the team completes per sprint</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f23_ip" type="checkbox"/><input id="f23" type="checkbox"/><label for="f23">Understand Cycle Time vs Lead Time — CT starts when work begins, LT starts when work is requested</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f24_ip" type="checkbox"/><input id="f24" type="checkbox"/><label for="f24">Calculate Sprint Predictability: Closed ÷ Final Sprint Scope (committed + mid-sprint additions)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f25_ip" type="checkbox"/><input id="f25" type="checkbox"/><label for="f25">Recognise that velocity is a planning tool — not a performance target or team ranking tool</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Kanban Basics -->
+<div class="cat-group">
+<div class="cat-title">Kanban Basics</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f26_ip" type="checkbox"/><input id="f26" type="checkbox"/><label for="f26">Visualise your workflow: every active work item must be visible on the board</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f27_ip" type="checkbox"/><input id="f27" type="checkbox"/><label for="f27">Understand WIP limits and why exceeding them creates queues — not productivity</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f28_ip" type="checkbox"/><input id="f28" type="checkbox"/><label for="f28">Know that WIP includes all active statuses: In Progress, In Review, In Testing, Blocked, Ready for Release</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f29_ip" type="checkbox"/><input id="f29" type="checkbox"/><label for="f29">Coach the team to finish items before starting new ones — "Stop Starting, Start Finishing"</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- User Stories in Practice -->
+<div class="cat-group">
+<div class="cat-title">User Stories in Practice</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f30_ip" type="checkbox"/><input id="f30" type="checkbox"/><label for="f30">Write User Stories in the format "As a [role], I want [goal], so that [value]" — the "so that" is not optional; it anchors every story to business value</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f31_ip" type="checkbox"/><input id="f31" type="checkbox"/><label for="f31">Understand why teams use Stories, not Tasks — Stories describe value to a user; Tasks describe technical work for the team. A backlog of tasks is a feature factory waiting to happen</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f32_ip" type="checkbox"/><input id="f32" type="checkbox"/><label for="f32">Split stories vertically — each story should deliver a thin, testable slice of value end-to-end, not a horizontal layer (e.g. "only the UI" or "only the database")</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f33_ip" type="checkbox"/><input id="f33" type="checkbox"/><label for="f33">Write Acceptance Criteria collaboratively with the team before Sprint Planning — criteria written alone by the PO after planning are not a shared understanding, they are a specification</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Definition of Ready & Done -->
+<div class="cat-group">
+<div class="cat-title">Definition of Ready &amp; Done</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f34_ip" type="checkbox"/><input id="f34" type="checkbox"/><label for="f34">Create and maintain a Definition of Ready (DoR) as a team — a story is Ready when it is small enough, understood by everyone, and has clear Acceptance Criteria before Sprint Planning begins</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f35_ip" type="checkbox"/><input id="f35" type="checkbox"/><label for="f35">Create and maintain a Definition of Done (DoD) as a team — Done means releasable, not "code complete". Every increment must meet the DoD before it is counted as delivered</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f36_ip" type="checkbox"/><input id="f36" type="checkbox"/><label for="f36">Review and update the DoD at every Retrospective — a DoD that never changes is a DoD the team has stopped believing in</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f37_ip" type="checkbox"/><input id="f37" type="checkbox"/><label for="f37">Use the DoR as a coaching tool, not a gate — if stories consistently fail the DoR, the problem is upstream in refinement, not at the door of Sprint Planning</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Team Agreements -->
+<div class="cat-group">
+<div class="cat-title">Team Agreements</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f38_ip" type="checkbox"/><input id="f38" type="checkbox"/><label for="f38">Facilitate a Team Agreement workshop at team formation and revisit it every PI — agreements on communication, working hours, escalation, and collaboration norms prevent the conflicts that retrospectives can't fix</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f39_ip" type="checkbox"/><input id="f39" type="checkbox"/><label for="f39">Make Team Agreements visible — post them on the team board or Confluence page. Agreements that exist only in people's heads are not agreements, they are assumptions</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f40_ip" type="checkbox"/><input id="f40" type="checkbox"/><label for="f40">Include psychological safety norms in Team Agreements explicitly — e.g. "We raise problems early", "We separate the person from the problem", "We ask for help without shame"</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Jira & Agile Metrics Tools -->
+<div class="cat-group">
+<div class="cat-title">Jira &amp; Agile Metrics Tools</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f41_ip" type="checkbox"/><input id="f41" type="checkbox"/><label for="f41">Use JQL (Jira Query Language) to filter and organise work — know at minimum: project, status, assignee, sprint, and label filters; build saved filters your team uses every daily</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f42_ip" type="checkbox"/><input id="f42" type="checkbox"/><label for="f42">Build and use a Great Gadgets (StonikByte) dashboard in Jira for your team — at minimum: Throughput, Cycle Time, and WIP displayed in one place and reviewed every Sprint</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f43_ip" type="checkbox"/><input id="f43" type="checkbox"/><label for="f43">Use the Great Gadgets Agile Metrics Dashboard in every Sprint Review — metrics without a cadence are decoration; metrics reviewed every sprint become coaching conversations</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f44_ip" type="checkbox"/><input id="f44" type="checkbox"/><label for="f44">Know how to read your team's Jira board as a flow signal — items stuck in a column for more than 2 days are not a status update problem, they are an impediment waiting to be named</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Professional Developer Skills (PSD) -->
+<div class="cat-group">
+<div class="cat-title">Professional Developer Skills <span style="font-weight:400;color:#576475;font-size:0.72rem;">— PSD</span></div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f45_ip" type="checkbox"/><input id="f45" type="checkbox"/><label for="f45">Understand your accountability as a Developer: you are responsible for creating a usable Increment every Sprint — not just writing code, but delivering done, working software</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f46_ip" type="checkbox"/><input id="f46" type="checkbox"/><label for="f46">Practice cross-functional self-management: the team collectively owns all the skills needed to deliver — no hand-offs, no "that's not my job"</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f47_ip" type="checkbox"/><input id="f47" type="checkbox"/><label for="f47">Apply continuous integration — merge code at least daily, keep the build green, and treat a broken build as the team's highest priority to fix</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f48_ip" type="checkbox"/><input id="f48" type="checkbox"/><label for="f48">Write automated tests as part of the Definition of Done — not as an afterthought. Tests that run manually are not a safety net, they are a debt</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f49_ip" type="checkbox"/><input id="f49" type="checkbox"/><label for="f49">Participate actively in Backlog Refinement — Developers bring technical insight into sizing, splitting, and dependency identification; the PO brings the value; both are needed to write a good story</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f50_ip" type="checkbox"/><input id="f50" type="checkbox"/><label for="f50">Understand and own the Definition of Done — you created it, you enforce it. "Done" means releasable, integrated, tested, and documented to the agreed standard</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f51_ip" type="checkbox"/><input id="f51" type="checkbox"/><label for="f51">Raise impediments immediately — never silently absorb a blocker for days. Surface it at the Daily Sync so the team and SM can act</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f52_ip" type="checkbox"/><input id="f52" type="checkbox"/><label for="f52">Manage technical debt actively — allocate at least 20% of each Sprint to refactoring and quality improvement; technical debt ignored is velocity borrowed from the future</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f53_ip" type="checkbox"/><input id="f53" type="checkbox"/><label for="f53">Collaborate on design and architecture — good architecture emerges from the team, not from a solo architect handing down decisions. Make design a conversation, not a document</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f54_ip" type="checkbox"/><input id="f54" type="checkbox"/><label for="f54">Forecast Sprint capacity honestly — commit to what the team can genuinely complete to Done, not what looks impressive. An over-committed Sprint produces undone work, not productivity</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f55_ip" type="checkbox"/><input id="f55" type="checkbox"/><label for="f55">Make work visible on the team board — update story status daily. A board that doesn't reflect reality is a planning tool that nobody can trust</label><span class="tag tag-dev">Dev</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="f56_ip" type="checkbox"/><input id="f56" type="checkbox"/><label for="f56">Know how to split a story too large for one Sprint — use SPIDR (Spike, Path, Interface, Data, Rules) or similar splitting patterns to create stories that fit and still deliver value</label><span class="tag tag-dev">Dev</span>
+</div>
+</div>
+</div><!-- /tier-body -->
+</div><!-- /tier-fundamentals -->
+<!-- ──────────────── EXPERIENCED ──────────────── -->
+<div class="tier tier-experienced" id="tier-exp">
+<div class="tier-header" onclick="toggleTier('exp')">
+<div class="tier-badge">Experienced</div>
+<div class="tier-title">From Understanding to Deliberate Practice</div>
+<div class="tier-subtitle">Patterns, metrics, and scaled agile start here.</div>
+<div class="tier-toggle open" id="tog-exp">▾</div>
+</div>
+<div class="tier-body" id="body-exp">
+<!-- SAFe & Scaling -->
+<div class="cat-group">
+<div class="cat-title">SAFe &amp; ART Execution</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e1_ip" type="checkbox"/><input id="e1" type="checkbox"/><label for="e1">Understand the purpose of a PI Planning event and the ART's cadence-based alignment</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e2_ip" type="checkbox"/><input id="e2" type="checkbox"/><label for="e2">Facilitate PI Planning for your team: sequence stories, craft PI Objectives, flag risks</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e3_ip" type="checkbox"/><input id="e3" type="checkbox"/><label for="e3">Contribute to the ART Vision and Roadmap; keep Team Backlog aligned with ART priorities</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e4_ip" type="checkbox"/><input id="e4" type="checkbox"/><label for="e4">Participate actively in ART Sync and PO Sync to surface cross-team dependencies early</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e5_ip" type="checkbox"/><input id="e5" type="checkbox"/><label for="e5">Know the 5 SM/TC responsibilities: PI Facilitation, Iteration Execution, Flow, High-Performing Teams, ART Performance</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e6_ip" type="checkbox"/><input id="e6" type="checkbox"/><label for="e6">Know the 5 PO responsibilities: Customer Connection, Vision &amp; Roadmap, Backlog Management, Team Support, Feedback Loop</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e7_ip" type="checkbox"/><input id="e7" type="checkbox"/><label for="e7">Understand the Innovation &amp; Planning (IP) Iteration and how to use it without wasting it</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Flow Metrics -->
+<div class="cat-group">
+<div class="cat-title">Flow Metrics (SAFe 6 Flavour)</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e8_ip" type="checkbox"/><input id="e8" type="checkbox"/><label for="e8">Apply Little's Law: L = λW — relate WIP, Throughput, and Lead Time in a coherent model</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e9_ip" type="checkbox"/><input id="e9" type="checkbox"/><label for="e9">Track all 6 SAFe Flow Metrics: Distribution, Velocity, Time, Load, Efficiency, Predictability</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e10_ip" type="checkbox"/><input id="e10" type="checkbox"/><label for="e10">Distinguish Flow Efficiency (active time ÷ flow time) and use it to expose wait time waste</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e11_ip" type="checkbox"/><input id="e11" type="checkbox"/><label for="e11">Run what-if scenarios: "If we reduce WIP by 2, what happens to Cycle Time?" — use data, not opinion</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e12_ip" type="checkbox"/><input id="e12" type="checkbox"/><label for="e12">Understand that Little's Law is boundary-agnostic: apply it at story, feature, or ART level by moving the system boundary</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Antipatterns -->
+<div class="cat-group">
+<div class="cat-title">Agile Antipatterns</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e13_ip" type="checkbox"/><input id="e13" type="checkbox"/><label for="e13">Identify "Output Focus" antipattern: the team ships features but ignores outcome-level feedback</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e14_ip" type="checkbox"/><input id="e14" type="checkbox"/><label for="e14">Detect "Mid-Sprint Scope Addition" and know how to negotiate it using Sprint Goal language</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e15_ip" type="checkbox"/><input id="e15" type="checkbox"/><label for="e15">Name and coach against "Shadow Sprint Backlog" — hidden work destroys transparency and inspect/adapt</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e16_ip" type="checkbox"/><input id="e16" type="checkbox"/><label for="e16">Recognise "No WIP Limit" as a systemic antipattern, not an individual discipline issue</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e17_ip" type="checkbox"/><input id="e17" type="checkbox"/><label for="e17">Use Wolpers (2024) antipattern vocabulary in retrospective coaching — name the pattern, not the person</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e18_ip" type="checkbox"/><input id="e18" type="checkbox"/><label for="e18">Connect Environment Lock and Dependency Drag antipatterns to cycle time degradation with data</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Retrospectives -->
+<div class="cat-group">
+<div class="cat-title">Retrospectives &amp; Continuous Improvement</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e19_ip" type="checkbox"/><input id="e19" type="checkbox"/><label for="e19">Design retrospectives that surface real issues — rotate formats, avoid comfort-zone templates</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e20_ip" type="checkbox"/><input id="e20" type="checkbox"/><label for="e20">Drive Kaizen: every retro must produce at least one actionable improvement with an owner and due date</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e21_ip" type="checkbox"/><input id="e21" type="checkbox"/><label for="e21">Intervene constructively when one or two voices dominate the retrospective — it is a safety signal</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e22_ip" type="checkbox"/><input id="e22" type="checkbox"/><label for="e22">Track improvement stories across sprints — a retro with no follow-up is a retro that didn't happen</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Advanced Kanban -->
+<div class="cat-group">
+<div class="cat-title">Kanban — Flow Thinking</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e23_ip" type="checkbox"/><input id="e23" type="checkbox"/><label for="e23">Read and interpret a Cumulative Flow Diagram (CFD) to spot growing queues and blocked states</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e24_ip" type="checkbox"/><input id="e24" type="checkbox"/><label for="e24">Construct correct JQL for WIP: status NOT IN (Closed, Done, "To Do", Backlog) — not just "In Progress"</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e25_ip" type="checkbox"/><input id="e25" type="checkbox"/><label for="e25">Use a Scatterplot of Cycle Time to set realistic SLA targets — percentile-based, not average-based</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e26_ip" type="checkbox"/><input id="e26" type="checkbox"/><label for="e26">Distinguish between SAFe Kanban Teams and Scrum Teams — know when to apply each in your ART</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Stakeholder & Transparency -->
+<div class="cat-group">
+<div class="cat-title">Transparency &amp; Stakeholder Collaboration</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e27_ip" type="checkbox"/><input id="e27" type="checkbox"/><label for="e27">Understand that transparency enables inspection — and inspection without transparency is misleading (Scrum Guide)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e28_ip" type="checkbox"/><input id="e28" type="checkbox"/><label for="e28">Run Sprint Reviews that generate real feedback, not demos that confirm what stakeholders already expect</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e29_ip" type="checkbox"/><input id="e29" type="checkbox"/><label for="e29">Address leadership-level transparency gaps: use roadmaps and Sprint Reviews to make strategy visible and connected to team work</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e30_ip" type="checkbox"/><input id="e30" type="checkbox"/><label for="e30">Communicate impediments upward with data and impact framing — not just status updates</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- Backlog Forensics — Wolpers 60 Questions -->
+<div class="cat-group">
+<div class="cat-title">Backlog Forensics <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e31_ip" type="checkbox"/><input id="e31" type="checkbox"/><label for="e31">Know your Product Backlog size — if it exceeds 3–4 sprints of capacity, the PO needs support in pruning it</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e32_ip" type="checkbox"/><input id="e32" type="checkbox"/><label for="e32">Check item age: any backlog item untouched for 5+ months is likely obsolete — challenge or delete it</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e33_ip" type="checkbox"/><input id="e33" type="checkbox"/><label for="e33">Know your average lead time from idea → backlog → delivery: if no one can answer this, the system is invisible</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e34_ip" type="checkbox"/><input id="e34" type="checkbox"/><label for="e34">Identify backlog items no current team member recognises — re-refine or delete them before they consume capacity</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e35_ip" type="checkbox"/><input id="e35" type="checkbox"/><label for="e35">Ask Wolpers' onboarding diagnostic: backlog size, item age, lead time, velocity, unfinished stories — in a 60-min timebox</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e36_ip" type="checkbox"/><input id="e36" type="checkbox"/><label for="e36">Know your velocity for the last 3 sprints — and understand why it varies, not just what it averages</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e37_ip" type="checkbox"/><input id="e37" type="checkbox"/><label for="e37">Understand your typical Sprint Backlog composition: one large item, some medium, a few small — this is the productivity sweet spot</label><span class="tag tag-all">Team</span>
+</div>
+</div>
+<!-- PO Vision Value Validation — McGreal/Jocham -->
+<div class="cat-group">
+<div class="cat-title">Product Discovery <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e38_ip" type="checkbox"/><input id="e38" type="checkbox"/><label for="e38">Own the Three Vs: Vision (transparency), Value (inspect), Validation (adapt) — these are the PO's strategic engine</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e39_ip" type="checkbox"/><input id="e39" type="checkbox"/><label for="e39">Articulate a clear Product Vision that the whole team can act on without direct orders — it creates autonomy, not dependency</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e40_ip" type="checkbox"/><input id="e40" type="checkbox"/><label for="e40">Distinguish outcome from output: a valuable sprint ships pearls (value) onto the thread (vision) — not just completed tickets</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e41_ip" type="checkbox"/><input id="e41" type="checkbox"/><label for="e41">Use MVP patterns deliberately: Promotional, Mining, Landing Page, Wizard of Oz, or Single-Feature — chosen for the hypothesis being tested</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e42_ip" type="checkbox"/><input id="e42" type="checkbox"/><label for="e42">Allocate meaningful time to user research — less than 10% is a red flag; 50% is excellent (McGreal &amp; Jocham)</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e43_ip" type="checkbox"/><input id="e43" type="checkbox"/><label for="e43">Involve developers in product discovery as early as possible — they prevent technically unviable solutions before they reach the Sprint</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="e44_ip" type="checkbox"/><input id="e44" type="checkbox"/><label for="e44">Guard the backlog from pet projects — the ability to say "no" with data is a core PO accountability, not a management responsibility</label><span class="tag tag-po">PO</span>
+</div>
+</div>
+</div>
+</div><!-- /tier-experienced -->
+<!-- ──────────────── EXPERT ──────────────── -->
+<div class="tier tier-expert" id="tier-xp">
+<div class="tier-header" onclick="toggleTier('xp')">
+<div class="tier-badge">Expert</div>
+<div class="tier-title">Systems Thinking &amp; Organisational Agility</div>
+<div class="tier-subtitle">Coach beyond the team — influence the system that shapes the team.</div>
+<div class="tier-toggle open" id="tog-xp">▾</div>
+</div>
+<div class="tier-body" id="body-xp">
+<!-- Coaching Mastery -->
+<div class="cat-group">
+<div class="cat-title">Coaching &amp; Servant Leadership</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x1_ip" type="checkbox"/><input id="x1" type="checkbox"/><label for="x1">Coach across the full Agile Coach Stance spectrum: teacher, mentor, facilitator, coach — and know when to switch</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x2_ip" type="checkbox"/><input id="x2" type="checkbox"/><label for="x2">Understand the Agile Coach to Chief Agility Officer growth path — identify where you currently sit on it and name one concrete step toward the next level</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x3_ip" type="checkbox"/><input id="x3" type="checkbox"/><label for="x3">Distinguish high-performing team traits (Google Project Aristotle): psychological safety, dependability, structure, meaning, impact</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x4_ip" type="checkbox"/><input id="x4" type="checkbox"/><label for="x4">Address systemic disempowerment: when teams can't adapt, the organisation is the impediment — not the team</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x5_ip" type="checkbox"/><input id="x5" type="checkbox"/><label for="x5">Run effective Inspect &amp; Adapt workshops at ART level — problem-solving, not post-mortems</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Probabilistic Forecasting -->
+<div class="cat-group">
+<div class="cat-title">Probabilistic Forecasting</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x6_ip" type="checkbox"/><input id="x6" type="checkbox"/><label for="x6">Run Monte Carlo Sprint Simulations (10,000 runs): communicate delivery confidence as probability ranges, not point estimates</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x7_ip" type="checkbox"/><input id="x7" type="checkbox"/><label for="x7">Understand why historical Throughput is a superior planning input to story point estimation</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x8_ip" type="checkbox"/><input id="x8" type="checkbox"/><label for="x8">Use predictability data to have honest PI commitment conversations with Product Management</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x9_ip" type="checkbox"/><input id="x9" type="checkbox"/><label for="x9">Build and maintain a Sprint Predictability Tracker — spot capacity erosion, scope creep, and trend shifts before they become crises</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Dependency & Architecture -->
+<div class="cat-group">
+<div class="cat-title">Dependencies &amp; Technical Agility</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x10_ip" type="checkbox"/><input id="x10" type="checkbox"/><label for="x10">Identify where dependencies break down: PI Planning boards vs Jira entry is the most common failure point</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x11_ip" type="checkbox"/><input id="x11" type="checkbox"/><label for="x11">Ensure dependencies captured in PI Planning are transcribed to Jira with consistent link types — not lost in translation</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x12_ip" type="checkbox"/><input id="x12" type="checkbox"/><label for="x12">Understand that independent deployments and a meaningful UAT gate are structurally incompatible without feature flags or a shared ART cadence</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x13_ip" type="checkbox"/><input id="x13" type="checkbox"/><label for="x13">Coach the team to distinguish technical debt as a flow metric problem — not just a code quality problem</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Portfolio & Strategy -->
+<div class="cat-group">
+<div class="cat-title">Portfolio &amp; Value Stream Thinking</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x14_ip" type="checkbox"/><input id="x14" type="checkbox"/><label for="x14">Prepare a value stream view of team-level flow metrics and present it to at least one senior stakeholder — make value creation and waste visible in language they use</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x15_ip" type="checkbox"/><input id="x15" type="checkbox"/><label for="x15">Influence ART Backlog prioritisation through data — not advocacy alone</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x16_ip" type="checkbox"/><input id="x16" type="checkbox"/><label for="x16">Understand Lean Portfolio Management (LPM) — how portfolio-level decisions shape team-level capacity</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x17_ip" type="checkbox"/><input id="x17" type="checkbox"/><label for="x17">Use the SAFe Coaches Handbook RTE readiness model to benchmark ART health — not just team health</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Culture & Organisation -->
+<div class="cat-group">
+<div class="cat-title">Culture &amp; Organisational Change</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x18_ip" type="checkbox"/><input id="x18" type="checkbox"/><label for="x18">Recognise that need-to-know information cultures undermine agile transparency at source — address it at leadership level</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x19_ip" type="checkbox"/><input id="x19" type="checkbox"/><label for="x19">Facilitate cross-team retrospectives and Communities of Practice — improvement doesn't stop at team boundaries</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x20_ip" type="checkbox"/><input id="x20" type="checkbox"/><label for="x20">Apply Tuckman's Stages of Team Dynamics to diagnose where a team is — and what they need from you next</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x21_ip" type="checkbox"/><input id="x21" type="checkbox"/><label for="x21">Complete SASM (SAFe Advanced Scrum Master) training — treat it as the start of systems-level coaching competency, not the end</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x22_ip" type="checkbox"/><input id="x22" type="checkbox"/><label for="x22">Complete SAFe POPM training — the certification marks the beginning of the competency journey, not its completion; apply it across at least two PIs</label><span class="tag tag-po">PO</span>
+</div>
+</div>
+<!-- Metrics Mastery -->
+<div class="cat-group">
+<div class="cat-title">Metrics Mastery</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x23_ip" type="checkbox"/><input id="x23" type="checkbox"/><label for="x23">Use rolling averages and trend lines — never make decisions from a single sprint's data</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x24_ip" type="checkbox"/><input id="x24" type="checkbox"/><label for="x24">Build a coherent metrics dashboard: Throughput + WIP + Cycle Time + Predictability + Flow Efficiency — all in one story</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x25_ip" type="checkbox"/><input id="x25" type="checkbox"/><label for="x25">Explain the difference between metrics that measure team performance and metrics that improve team behaviour — coach teams to own the latter</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x26_ip" type="checkbox"/><input id="x26" type="checkbox"/><label for="x26">Integrate Great Gadgets (StonikByte) flow metrics with Jira data — know which JQL drives which metric and why</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- EBM — McGreal/Jocham Expert Level -->
+<div class="cat-group">
+<div class="cat-title">Evidence-Based Management <span style="font-weight:400;color:#576475;font-size:0.72rem;">— McGreal &amp; Jocham</span></div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x27_ip" type="checkbox"/><input id="x27" type="checkbox"/><label for="x27">Apply the 3 EBM Key Value Areas: Current Value (what we deliver now), Time to Market (how fast), Ability to Innovate (sustainability)</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x28_ip" type="checkbox"/><input id="x28" type="checkbox"/><label for="x28">Identify proxy metrics for Current Value relevant to your insurance product context — in KYC, story count is not enough; find what signals actual customer value in a regulated environment</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x29_ip" type="checkbox"/><input id="x29" type="checkbox"/><label for="x29">Distinguish leading from lagging indicators — leading predict future value, lagging confirm past delivery</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x30_ip" type="checkbox"/><input id="x30" type="checkbox"/><label for="x30">Make the case for tracking Ability to Innovate at ART level — quantify how much capacity goes to maintenance vs new value, and present the data to leadership; full measurement is a 36-month goal</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x31_ip" type="checkbox"/><input id="x31" type="checkbox"/><label for="x31">Use evidence, not opinion, to justify backlog ordering — ROI, risk, and validated customer data outweigh stakeholder seniority</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x32_ip" type="checkbox"/><input id="x32" type="checkbox"/><label for="x32">Know when to pivot vs persevere: Sprint Review feedback is the signal — treat assumptions as hypotheses until validated in the market</label><span class="tag tag-po">PO</span>
+</div>
+</div>
+<!-- SM Onboarding Diagnostic — Wolpers 60 Questions -->
+<div class="cat-group">
+<div class="cat-title">SM Onboarding Diagnostic <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Wolpers</span></div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x33_ip" type="checkbox"/><input id="x33" type="checkbox"/><label for="x33">When joining a new team, prepare a structured 60-min diagnostic: backlog health, metrics, technical debt, and team challenges — before forming any opinions</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x34_ip" type="checkbox"/><input id="x34" type="checkbox"/><label for="x34">Ask the PO: What is your product vision? How do you learn about new requirements? How much time goes to user research? — these reveal discovery maturity</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x35_ip" type="checkbox"/><input id="x35" type="checkbox"/><label for="x35">Ask developers: Who created the DoD? What is the technical debt level? How much sprint capacity goes to refactoring? — 20% is the minimum health signal</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x36_ip" type="checkbox"/><input id="x36" type="checkbox"/><label for="x36">Ask the team: How many stories are typically unfinished per sprint, and why? Regularly missing Sprint Goals is a critical coaching signal — not a capacity problem</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x37_ip" type="checkbox"/><input id="x37" type="checkbox"/><label for="x37">Close every onboarding session with an open question: "What are the 3 main challenges the team faces today?" — use the answers to seed the next retrospective</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- SM Mastery — Geoff Watts -->
+<div class="cat-group">
+<div class="cat-title">SM Mastery: Good → Great <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Watts</span></div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x38_ip" type="checkbox"/><input id="x38" type="checkbox"/><label for="x38">A good SM grasps the responsibilities of the role. A great SM grasps the skills and mindset — know which one you are currently operating from</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x39_ip" type="checkbox"/><input id="x39" type="checkbox"/><label for="x39">A good SM will be indispensable to a team. A great SM becomes both dispensable and wanted — the team functions without you, and still chooses to work with you</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x40_ip" type="checkbox"/><input id="x40" type="checkbox"/><label for="x40">A good SM maintains team harmony. A great SM guides a team through disharmony to reach a new level — conflict is a signal, not a failure</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x41_ip" type="checkbox"/><input id="x41" type="checkbox"/><label for="x41">Master the power of silence in facilitation — when you feel the urge to speak, wait a little longer; the team fills the space with what actually matters</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x42_ip" type="checkbox"/><input id="x42" type="checkbox"/><label for="x42">Hold the RE-TRAINED model (Watts): Respected, Enabling, Tactful, Resourceful, Alternative, Inspiring, Nurturing, Empathic, Disruptive — assess yourself honestly against each dimension</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x43_ip" type="checkbox"/><input id="x43" type="checkbox"/><label for="x43">Vary your retrospective formats deliberately — a repetitive retro is a retro the team has stopped believing in; rotate formats to restore engagement</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x44_ip" type="checkbox"/><input id="x44" type="checkbox"/><label for="x44">Ask for coaching feedback from your own team at least once per quarter — the act of asking increases respect regardless of the answers you receive</label><span class="tag tag-sm">SM</span>
+</div>
+</div>
+<!-- Flow Framework — Mik Kersten: Project to Product -->
+<div class="cat-group">
+<div class="cat-title">Flow Framework <span style="font-weight:400;color:#576475;font-size:0.72rem;">— Kersten</span></div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x45_ip" type="checkbox"/><input id="x45" type="checkbox"/><label for="x45">Understand the shift from project mode to product mode: project management optimises for time and budget; product management optimises for value stream flow</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x46_ip" type="checkbox"/><input id="x46" type="checkbox"/><label for="x46">Know the 4 Flow Item types (Kersten): Features (new value), Defects (quality), Risks (security/compliance), Debts (impediments to future delivery) — every work item maps to exactly one</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x47_ip" type="checkbox"/><input id="x47" type="checkbox"/><label for="x47">Track Flow Distribution across the 4 item types — an imbalance (e.g. 80% features, 5% debt) reveals unsustainable delivery strategy before it becomes a crisis</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x48_ip" type="checkbox"/><input id="x48" type="checkbox"/><label for="x48">Prepare a business-language metrics summary (Flow Velocity, Flow Time, Predictability) and present it to at least one senior stakeholder — translate delivery data into business impact, not just team performance</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x49_ip" type="checkbox"/><input id="x49" type="checkbox"/><label for="x49">Treat technical debt work as a Flow Item with its own business case — never let it be invisible or deferred indefinitely as "not a feature"</label><span class="tag tag-po">PO</span>
+</div>
+</div>
+<!-- DevOps Three Ways -->
+<div class="cat-group">
+<div class="cat-title">DevOps &amp; Delivery Flow <span style="font-weight:400;color:#576475;font-size:0.72rem;">— DevOps Handbook</span></div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x50_ip" type="checkbox"/><input id="x50" type="checkbox"/><label for="x50">Understand the Three Ways of DevOps: Flow (left to right, fast delivery), Feedback (right to left, fast learning), Continual Learning (prevent recurrence, share knowledge)</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="team">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x51_ip" type="checkbox"/><input id="x51" type="checkbox"/><label for="x51">Apply small batch thinking: smaller work items reduce risk, shorten feedback loops, and make flow problems visible before they become blockers</label><span class="tag tag-all">Team</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x52_ip" type="checkbox"/><input id="x52" type="checkbox"/><label for="x52">Identify and document deployment lead time as a systemic impediment with data — in a regulated insurance environment, resolution is likely a 36+ month goal; surfacing it with evidence is the 24-month target</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="dev">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x53_ip" type="checkbox"/><input id="x53" type="checkbox"/><label for="x53">Build quality in at the source through continuous integration — defects discovered six months later lose the cause-and-effect link needed to prevent recurrence</label><span class="tag tag-dev">Dev</span>
+</div>
+</div>
+<!-- Coaching Stance & Self-Awareness — ICAgile + Lukassen -->
+<div class="cat-group">
+<div class="cat-title">Coaching Stance &amp; Customer Insight <span style="font-weight:400;color:#576475;font-size:0.72rem;">— ICAgile · Lukassen</span></div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x54_ip" type="checkbox"/><input id="x54" type="checkbox"/><label for="x54">In every coaching moment, consciously choose your stance — teaching, mentoring, facilitating, or coaching — and know why you chose it (ICAgile LO 1.1.1)</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x55_ip" type="checkbox"/><input id="x55" type="checkbox"/><label for="x55">Develop emotional intelligence as the underpinning of coaching: self-awareness prevents your biases from contaminating how you facilitate the team (ICAgile LO 2.1.1)</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="sm">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x56_ip" type="checkbox"/><input id="x56" type="checkbox"/><label for="x56">Use powerful questions, not leading questions: "What did you learn?" lands differently than "Did that work?" — open questions trigger insight, closed questions confirm assumptions</label><span class="tag tag-sm">SM</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x57_ip" type="checkbox"/><input id="x57" type="checkbox"/><label for="x57">Build and maintain user personas grounded in research — know your users as people, not personas on a slide: their jobs-to-be-done, fears, and goals drive backlog ordering (Lukassen)</label><span class="tag tag-po">PO</span>
+</div>
+<div class="check-item role-visible" data-roles="po">
+<input aria-label="Mark in progress" class="in-progress-cb" id="x58_ip" type="checkbox"/><input id="x58" type="checkbox"/><label for="x58">Stay outcome-oriented not output-oriented: a PO accountable only for delivered features is operating as a project manager — accountability extends to the value those features create (Lukassen)</label><span class="tag tag-po">PO</span>
+</div>
+</div>
+</div>
+</div><!-- /tier-expert -->
+</div><!-- /container -->
+<div class="reset-wrap">
+<button class="reset-btn" onclick="resetAll()">↺ Reset all checkboxes</button>
+</div>
 <div class="legend">
-  <span>Role tags:</span>
-  <span class="tag tag-sm">SM</span> Scrum Master &nbsp;·&nbsp;
-  <span class="tag tag-po">PO</span> Product Owner &nbsp;·&nbsp;
-  <span class="tag tag-dev">Dev</span> Developers &nbsp;·&nbsp;
+<span>Role tags:</span>
+<span class="tag tag-sm">SM</span> Scrum Master  · 
+  <span class="tag tag-po">PO</span> Product Owner  · 
+  <span class="tag tag-dev">Dev</span> Developers  · 
   Items with no tag apply to all roles.
   <span style="margin-left:auto;color:#576475;font-size:0.78rem;">Sources: Scrum Guide 2020 · SAFe 6.0 · Wolpers 2021/2024 · McGreal &amp; Jocham 2018 · Watts 2021 · Kersten 2018 · DevOps Handbook · ICAgile · Lukassen &amp; Schuurman 2023 · Agile Manifesto · Little's Law</span>
 </div>
-
 <script>
   function isCheckedOnlyEnabled() {
     const el = document.getElementById('checkedOnlyToggle');
