@@ -1985,10 +1985,17 @@
 
       const roleMatch = selectedRoles.length === 0 ? true : selectedRoles.includes(itemRole);
       const tierMatch = selectedTiers.length === 0 ? true : selectedTiers.includes(tier);
-      const checkedMatch = checkedOnly ? !!(doneCb && doneCb.checked) : true;
-      const inProgressMatch = inProgressOnly ? !!(ipCb && ipCb.checked) : true;
+      let statusMatch = true;
 
-      const visible = roleMatch && tierMatch && checkedMatch && inProgressMatch;
+      if (checkedOnly && inProgressOnly) {
+        statusMatch = (doneCb && doneCb.checked) || (ipCb && ipCb.checked);
+      } else if (checkedOnly) {
+        statusMatch = !!(doneCb && doneCb.checked);
+      } else if (inProgressOnly) {
+        statusMatch = !!(ipCb && ipCb.checked);
+      }
+
+      const visible = roleMatch && tierMatch && statusMatch;
       item.classList.toggle('role-visible', visible);
     });
 
