@@ -192,7 +192,14 @@
     color: #2C2C34;
     white-space: nowrap;
   }
-  .float-count span { color: #0FB6DF; }
+  .float-count span { color: #4F7831; }
+  .float-subcount {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #576475;
+    white-space: nowrap;
+  }
+  .float-subcount span { color: #595959; }
   @media(max-width:480px) {
     .float-header { padding: 6px 14px; gap: 10px; }
     .ring-wrap { width: 32px; height: 32px; }
@@ -897,7 +904,9 @@
 </div>
 <div class="float-meta">
 <div class="float-title">Progress</div>
-<div class="float-count"><span id="floatChecked">0</span> / <span id="floatTotal">0</span> completed</div>
+<div class="float-count"><span id="floatCompleted">0</span> completed</div>
+<div class="float-subcount"><span id="floatInProgress">0</span> in progress</div>
+<div class="float-subcount"><span id="floatTotal">0</span> total visible</div>
 </div>
 </div>
 <div class="page-header">
@@ -2018,17 +2027,22 @@
 
     const visibleItems = [...document.querySelectorAll('.check-item.role-visible')];
     const total   = visibleItems.length;
-    const checked = visibleItems.filter(item => {
+    const completed = visibleItems.filter(item => {
       const doneCb = item.querySelector('input[type="checkbox"]:not(.in-progress-cb)');
       return !!(doneCb && doneCb.checked);
     }).length;
-    const pct     = total ? Math.round((checked / total) * 100) : 0;
+    const inProgress = visibleItems.filter(item => {
+      const ipCb = item.querySelector('.in-progress-cb');
+      return !!(ipCb && ipCb.checked);
+    }).length;
+    const pct     = total ? Math.round((completed / total) * 100) : 0;
 
     document.getElementById('progFill').style.width  = pct + '%';
-    document.getElementById('progLabel').textContent = checked + ' / ' + total;
-    document.getElementById('floatPct').textContent     = pct + '%';
-    document.getElementById('floatChecked').textContent = checked;
-    document.getElementById('floatTotal').textContent   = total;
+    document.getElementById('progLabel').textContent = completed + ' / ' + total;
+    document.getElementById('floatPct').textContent       = pct + '%';
+    document.getElementById('floatCompleted').textContent = completed;
+    document.getElementById('floatInProgress').textContent = inProgress;
+    document.getElementById('floatTotal').textContent     = total;
 
     const circumference = 113.1;
     const offset = circumference - (pct / 100) * circumference;
