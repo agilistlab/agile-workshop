@@ -805,6 +805,15 @@
     overflow: hidden;
   }
 
+
+/* Match checkbox color to state */
+.check-item.done input[type="checkbox"]:not(.in-progress-cb) {
+  accent-color: #d9f1c2;
+}
+
+.check-item.in-progress .in-progress-cb {
+  accent-color: #eeeeee;
+}
 </style>
 </head>
 <body class="password-locked">
@@ -972,7 +981,7 @@
 </div><!-- /timeline-body -->
 </div>
 <!-- Role filter -->
-<div class="role-nav">
+<div class="role-nav" style=";display:flex;justify-content:center;flex-wrap:wrap;gap:16px;align-items:center;">
 <div class="filter-group">
 <label class="filter-check"><input id="filterTeam" onchange="updateProgress()" type="checkbox"/><span>Team</span></label>
 <label class="filter-check"><input id="filterSM" onchange="updateProgress()" type="checkbox"/><span>Scrum Master</span></label>
