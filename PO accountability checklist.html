@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PO Accountability Checklist — Scrum &amp; SAFe</title>
+<link href="https://fonts.googleapis.com/css2?family=PT+Root+UI:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F7F6;
+    --navy: #002855;
+    --cyan: #0FB6DF;
+    --slate: #576475;
+    --walnut: #4B4439;
+    --title: #2C2C34;
+    --border: #E1DFDB;
+    --white: #ffffff;
+    --amber: #C97A1A;
+    --green: #1A7A4A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'PT Root UI', sans-serif;
+    background: var(--bg);
+    color: var(--title);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--navy);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-logo { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
+  .topbar-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); }
+  .topbar-sep { width: 1px; height: 16px; background: rgba(255,255,255,0.2); }
+  .reading-time { font-size: 12px; color: rgba(255,255,255,0.55); display: flex; gap: 16px; }
+  .reading-time span { white-space: nowrap; }
+
+  /* CONTENT */
+  .content { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* HERO */
+  .hero {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--navy);
+    border-radius: 5px;
+    padding: 36px 40px 28px;
+    margin-bottom: 24px;
+  }
+  .hero-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); margin-bottom: 10px; }
+  .hero h1 { font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1.25; margin-bottom: 12px; }
+  .hero-sub { font-size: 14px; color: var(--slate); line-height: 1.7; max-width: 680px; margin-bottom: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin-top: 16px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--slate); margin-bottom: 6px; }
+  .progress-label strong { color: var(--navy); font-size: 13px; }
+  .progress-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--cyan); border-radius: 4px; transition: width 0.3s ease; width: 0%; }
+
+  /* CONTROLS */
+  .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; gap: 12px; }
+  .controls-right { display: flex; gap: 8px; }
+  .ctrl-btn {
+    font-family: 'PT Root UI', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 6px 16px; border-radius: 4px; cursor: pointer; transition: all 0.15s;
+    border: 1.5px solid var(--navy);
+  }
+  .ctrl-btn.active { background: var(--navy); color: white; }
+  .ctrl-btn.inactive { background: transparent; color: var(--navy); }
+  .ctrl-btn:hover { opacity: 0.85; }
+  .reset-btn {
+    font-family: 'PT Root UI', sans-serif; font-size: 12px; font-weight: 600;
+    padding: 6px 16px; border-radius: 4px; cursor: pointer; transition: all 0.15s;
+    border: 1.5px solid var(--slate); background: transparent; color: var(--slate);
+  }
+  .reset-btn:hover { border-color: var(--walnut); color: var(--walnut); }
+
+  /* PART DIVIDER */
+  .part-divider { display: flex; align-items: center; gap: 16px; margin: 36px 0 16px; }
+  .part-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .part-label { display: flex; align-items: center; gap: 10px; background: var(--navy); color: white; padding: 8px 20px; border-radius: 4px; white-space: nowrap; }
+  .part-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cyan); }
+  .part-name { font-size: 14px; font-weight: 700; color: white; }
+
+  /* SECTIONS */
+  .section { background: var(--white); border: 1px solid var(--border); border-radius: 5px; margin-bottom: 10px; overflow: hidden; }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; cursor: pointer; user-select: none; gap: 16px; transition: background 0.15s;
+  }
+  .section-header:hover { background: var(--bg); }
+  .section-header.open { background: var(--navy); }
+  .section-header.open .section-title { color: white; }
+  .section-header.open .section-meta { color: rgba(255,255,255,0.6); }
+  .section-header.open .chevron { color: white; transform: rotate(180deg); }
+  .section-header.open .section-num { color: var(--cyan); }
+
+  .section-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
+  .section-num { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; color: var(--cyan); min-width: 24px; flex-shrink: 0; }
+  .section-titles { flex: 1; min-width: 0; }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--navy); line-height: 1.2; }
+  .section-meta { font-size: 12px; color: var(--slate); margin-top: 2px; }
+  .chevron { font-size: 16px; color: var(--slate); transition: transform 0.2s; flex-shrink: 0; }
+
+  /* SECTION PROGRESS BADGE */
+  .sec-progress {
+    font-size: 11px; font-weight: 700; color: var(--slate);
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 3px 10px; white-space: nowrap; flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .sec-progress.done { background: rgba(26,122,74,0.1); border-color: var(--green); color: var(--green); }
+  .section-header.open .sec-progress { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+  .section-header.open .sec-progress.done { background: rgba(26,122,74,0.3); border-color: rgba(26,122,74,0.6); color: white; }
+
+  .section-body { display: none; padding: 4px 24px 20px; border-top: 1px solid var(--border); }
+  .section-body.open { display: block; }
+  .section-intro { font-size: 13px; color: var(--slate); margin: 14px 0 12px; line-height: 1.65; font-style: italic; }
+
+  /* CHECKLIST ITEMS */
+  .check-list { list-style: none; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+    border-radius: 3px;
+    margin: 0 -6px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: var(--bg); }
+  .check-item.checked .check-label { color: var(--slate); text-decoration: line-through; opacity: 0.65; }
+
+  /* CUSTOM CHECKBOX */
+  .check-box {
+    width: 18px; height: 18px; border-radius: 4px;
+    border: 2px solid var(--border);
+    background: white;
+    flex-shrink: 0;
+    margin-top: 3px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .check-item.checked .check-box {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .check-item.checked .check-box::after {
+    content: '';
+    width: 5px; height: 9px;
+    border: 2px solid white;
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    display: block;
+  }
+
+  .check-label { font-size: 14px; line-height: 1.6; flex: 1; }
+  .check-label strong { color: var(--navy); font-weight: 600; }
+  .check-item.checked .check-label strong { color: inherit; }
+
+  /* TAG */
+  .item-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    padding: 2px 7px; border-radius: 3px; margin-top: 4px;
+    flex-shrink: 0; white-space: nowrap; align-self: flex-start; margin-top: 5px;
+  }
+  .tag-must { background: rgba(0,40,85,0.08); color: var(--navy); }
+  .tag-event { background: rgba(15,182,223,0.12); color: #0a8fab; }
+  .tag-safe { background: rgba(75,68,57,0.1); color: var(--walnut); }
+
+  /* CALLOUT */
+  .callout { padding: 12px 16px; border-radius: 4px; border-left: 3px solid; margin: 14px 0 4px; font-size: 13px; line-height: 1.65; }
+  .callout.navy { border-color: var(--navy); background: rgba(0,40,85,0.05); }
+  .callout.cyan { border-color: var(--cyan); background: rgba(15,182,223,0.07); }
+  .callout.amber { border-color: var(--amber); background: rgba(201,122,26,0.07); }
+  .callout strong { display: block; margin-bottom: 3px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* FOOTER */
+  .footer { text-align: center; font-size: 12px; color: var(--slate); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  @media print {
+    .topbar { position: relative; }
+    .section-body { display: block !important; }
+    .controls { display: none; }
+    .section-header { background: var(--bg) !important; }
+    .section-header .section-title { color: var(--navy) !important; }
+    .section-header .section-num { color: var(--cyan) !important; }
+    .section-header .chevron { display: none; }
+    .check-item.checked .check-label { text-decoration: none; opacity: 1; }
+  }
+
+  @media (max-width: 600px) {
+    .content { padding: 24px 16px 60px; }
+    .hero { padding: 24px 20px; }
+    .reading-time { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-logo">InsurNxt ART</span>
+    <div class="topbar-sep"></div>
+    <span class="topbar-title">PO Accountability Checklist — Scrum &amp; SAFe</span>
+  </div>
+  <div class="reading-time">
+    <span>⏱ Skim: 2 min</span>
+    <span>Full review: 8 min</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">New Product Owner · Scrum Guide 2020 · SAFe 6.0</div>
+    <h1>PO Accountability Checklist</h1>
+    <div class="hero-sub">Use this checklist to confirm you understand and are actively fulfilling your core accountabilities and responsibilities as a Product Owner. Tick each item when you are consistently doing it — not just aware of it.</div>
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>Overall progress</span>
+        <strong id="progress-text">0 of 0 complete</strong>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="reset-btn" id="btn-reset" onclick="resetAll()">↺ Reset all</button>
+    <div class="controls-right">
+      <button class="ctrl-btn inactive" id="btn-expand" onclick="expandAll()">Expand all</button>
+      <button class="ctrl-btn active" id="btn-collapse" onclick="collapseAll()">Collapse all</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PART 1: SCRUM ═══════════════════ -->
+  <div class="part-divider">
+    <div class="part-divider-line"></div>
+    <div class="part-label">
+      <span class="part-badge">Part 1</span>
+      <span class="part-name">Scrum Accountabilities</span>
+    </div>
+    <div class="part-divider-line"></div>
+  </div>
+
+  <!-- S1: Product Goal & Backlog -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">S1</span>
+        <div class="section-titles">
+          <div class="section-title">Product Goal &amp; Backlog Ownership</div>
+          <div class="section-meta">The PO's three non-delegable accountabilities</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-s1">0 / 6</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">Per the Scrum Guide 2020, the Product Owner is accountable for maximising product value. These items are non-delegable — the PO may get help, but they own the outcome.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I have defined and communicated a clear Product Goal</strong> — a long-term objective the Scrum Team plans against, expressed as a meaningful future state of the product.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>The Product Backlog is the single source of planned work</strong> — nothing enters the Sprint Backlog that isn't first in the Product Backlog.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I regularly order the backlog</strong> based on value, risk, cost, and dependencies — not stakeholder pressure or recency.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Backlog items near the top are clear, estimated, and understood</strong> by the Developers — ready to enter Sprint Planning without ambiguity.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I actively accept or reject completed stories</strong> against their acceptance criteria and the Definition of Done — not after the Sprint Review.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I understand and can explain the Definition of Done</strong> — and I ensure no incomplete work is presented to stakeholders as Done.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- S2: Scrum Events -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">S2</span>
+        <div class="section-titles">
+          <div class="section-title">Scrum Events Participation</div>
+          <div class="section-meta">Active contribution — not passive attendance</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-s2">0 / 5</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">The PO is a full member of the Scrum Team. Presence matters, but contribution is what drives value. Tick each item when you are consistently doing it — not just showing up.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Sprint Planning:</strong> I present the most valuable backlog items, clarify requirements, and collaborate with the team to craft a meaningful Sprint Goal. I do not assign tasks.</span>
+          <span class="item-tag tag-event">EVENT</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Daily Scrum:</strong> I am available to answer questions and unblock the team. I do not run the event or use it as a status report for myself.</span>
+          <span class="item-tag tag-event">EVENT</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Sprint Review:</strong> I host the event, present the outcome to stakeholders, and update the backlog based on feedback received. The Review is a feedback loop — not a sign-off ceremony.</span>
+          <span class="item-tag tag-event">EVENT</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Sprint Retrospective:</strong> I participate fully — including reflecting on my own effectiveness in clarifying, ordering, and being available to the team.</span>
+          <span class="item-tag tag-event">EVENT</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>Backlog Refinement:</strong> I lead or co-facilitate ongoing refinement so that Sprint Planning is never blocked by unclear or unready items.</span>
+          <span class="item-tag tag-event">EVENT</span>
+        </li>
+      </ul>
+      <div class="callout amber">
+        <strong>Reminder</strong>
+        Scrum events are not "ceremonies." Use the correct language — Scrum Guide 2020 uses "events" throughout.
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: Stakeholder & Customer (Scrum) -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">S3</span>
+        <div class="section-titles">
+          <div class="section-title">Stakeholder &amp; Customer Engagement</div>
+          <div class="section-meta">The PO as the single voice for the product</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-s3">0 / 4</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">The PO represents the customer's needs to the team — and the team's realities back to stakeholders. This requires active management, not passive reception of requests.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I know who my stakeholders are</strong> and have mapped them by interest and influence. I engage proactively — not only when they raise issues.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I make prioritisation decisions transparent</strong> — stakeholders understand why items are ordered as they are, not just what is at the top.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I gather feedback directly from customers and users</strong> — through interviews, observation, or reviews — not exclusively through intermediaries.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="s3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I protect the team from mid-Sprint scope changes</strong> — directing new requests to the backlog and assessing their priority against the Sprint Goal rather than inserting them immediately.</span>
+          <span class="item-tag tag-must">MUST</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ PART 2: SAFe ═══════════════════ -->
+  <div class="part-divider" style="margin-top:44px;">
+    <div class="part-divider-line"></div>
+    <div class="part-label">
+      <span class="part-badge">Part 2</span>
+      <span class="part-name">SAFe Responsibilities</span>
+    </div>
+    <div class="part-divider-line"></div>
+  </div>
+
+  <!-- F1: ART Backlog & PI Planning -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">F1</span>
+        <div class="section-titles">
+          <div class="section-title">ART Backlog &amp; PI Planning</div>
+          <div class="section-meta">Connecting team work to ART-level strategy</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-f1">0 / 5</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">In SAFe, the PO translates ART-level Features into team-level Stories, and actively contributes to PI Planning to ensure the team's iteration goals are aligned with the PI Objectives.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I understand the difference between the ART Backlog and the Team Backlog</strong> — Features live in the ART Backlog; Stories live in the Team Backlog. I do not conflate them.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I decompose Features into Stories</strong> that are small enough for the team to complete within a single iteration, with clear acceptance criteria.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I actively participate in PI Planning</strong> — I understand the vision and roadmap, contribute to iteration planning, help craft PI Objectives, and identify dependencies during the event.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>My team's PI Objectives are meaningful commitments</strong> — not a copy of the iteration plan. They describe the business outcomes the team intends to achieve in the PI.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f1">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I prioritise backlog items using Cost of Delay</strong> — balancing urgency, value, and risk-reduction — rather than purely responding to stakeholder requests.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- F2: PO Sync & ART Coordination -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">F2</span>
+        <div class="section-titles">
+          <div class="section-title">PO Sync &amp; ART Coordination</div>
+          <div class="section-meta">Your role across teams, not just within your team</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-f2">0 / 4</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">The PO Sync is the primary touchpoint for aligning POs across the ART. It is not a status meeting — it is a coordination event for surfacing dependencies and sharing feedback that affects multiple teams.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I attend and contribute to the PO Sync</strong> — bringing cross-team dependencies, blockers, and backlog insights that affect other teams or the ART Backlog.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I collaborate with Product Management</strong> to stay aligned with the product vision and roadmap — and I bring ground-level delivery realities back to them proactively.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I identify and surface cross-team dependencies early</strong> — in refinement, PI Planning, and the PO Sync — rather than discovering them mid-iteration.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f2">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I participate in System Demos</strong> — inspecting the integrated ART increment and gathering feedback to inform the next iteration's backlog priorities.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- F3: Customer & Stakeholder Engagement (SAFe) -->
+  <div class="section">
+    <div class="section-header" onclick="toggle(this)">
+      <div class="section-left">
+        <span class="section-num">F3</span>
+        <div class="section-titles">
+          <div class="section-title">Customer &amp; Stakeholder Engagement in SAFe</div>
+          <div class="section-meta">Feedback loops that fuel the value stream</div>
+        </div>
+      </div>
+      <span class="sec-progress" id="prog-f3">0 / 5</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="section-body">
+      <p class="section-intro">In SAFe, the PO is responsible for fostering the feedback loops that keep the ART delivering genuine value — not assumed value. This requires continuous, structured engagement beyond the Sprint Review.</p>
+      <ul class="check-list">
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I connect with customers directly</strong> — through empathy interviews, Gemba walks, or user research — at least once per PI.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I validate benefit assumptions with real data</strong> — not just delivery completion. I track whether delivered features are actually being used and generating value.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I share customer and stakeholder feedback with the ART</strong> — not just with my team. I bring insights to the PO Sync, System Demo, and PI Planning where they can inform ART-level decisions.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I balance competing stakeholder perspectives</strong> using customer centricity as the anchor — not seniority or volume of requests.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+        <li class="check-item" onclick="toggleCheck(this)" data-section="f3">
+          <div class="check-box"></div>
+          <span class="check-label"><strong>I apply the Plan-Do-Check-Adjust cycle</strong> — feedback from each iteration and PI informs continuous refinement of the product vision, roadmap, and backlog.</span>
+          <span class="item-tag tag-safe">SAFe</span>
+        </li>
+      </ul>
+      <div class="callout navy">
+        <strong>Key principle</strong>
+        Value is only real when a customer uses a working solution. Delivery completion is a means — customer outcomes are the measure.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Scrum Guide 2020 · SAFe 6.0 · InsurNxt ART · June 2026
+  </div>
+
+</div>
+
+<script>
+  const STORAGE_KEY = 'po_accountability_checklist_v1';
+
+  // Load state
+  function loadState() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch { return {}; }
+  }
+
+  function saveState(state) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
+  }
+
+  function toggleCheck(item) {
+    item.classList.toggle('checked');
+    persistAndUpdate();
+  }
+
+  function persistAndUpdate() {
+    const state = {};
+    document.querySelectorAll('.check-item').forEach((item, i) => {
+      state[i] = item.classList.contains('checked');
+    });
+    saveState(state);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.check-item');
+    const done = document.querySelectorAll('.check-item.checked');
+    const total = all.length;
+    const count = done.length;
+    const pct = total ? Math.round((count / total) * 100) : 0;
+
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = count + ' of ' + total + ' complete';
+
+    // Per-section progress
+    const sections = {};
+    all.forEach(item => {
+      const sec = item.dataset.section;
+      if (!sections[sec]) sections[sec] = { total: 0, done: 0 };
+      sections[sec].total++;
+      if (item.classList.contains('checked')) sections[sec].done++;
+    });
+
+    Object.entries(sections).forEach(([sec, { total, done }]) => {
+      const el = document.getElementById('prog-' + sec);
+      if (!el) return;
+      el.textContent = done + ' / ' + total;
+      el.classList.toggle('done', done === total && total > 0);
+    });
+  }
+
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const isOpen = header.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+    updateControlState();
+  }
+
+  function expandAll() {
+    document.querySelectorAll('.section-header').forEach(h => {
+      h.classList.add('open');
+      h.nextElementSibling.classList.add('open');
+    });
+    document.getElementById('btn-expand').className = 'ctrl-btn active';
+    document.getElementById('btn-collapse').className = 'ctrl-btn inactive';
+  }
+
+  function collapseAll() {
+    document.querySelectorAll('.section-header').forEach(h => {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    });
+    document.getElementById('btn-collapse').className = 'ctrl-btn active';
+    document.getElementById('btn-expand').className = 'ctrl-btn inactive';
+  }
+
+  function updateControlState() {
+    const headers = document.querySelectorAll('.section-header');
+    const openCount = document.querySelectorAll('.section-header.open').length;
+    document.getElementById('btn-expand').className = openCount === headers.length ? 'ctrl-btn active' : 'ctrl-btn inactive';
+    document.getElementById('btn-collapse').className = openCount === 0 ? 'ctrl-btn active' : 'ctrl-btn inactive';
+  }
+
+  function resetAll() {
+    if (!confirm('Reset all checkboxes?')) return;
+    document.querySelectorAll('.check-item').forEach(item => item.classList.remove('checked'));
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    updateProgress();
+  }
+
+  // Init
+  window.addEventListener('DOMContentLoaded', () => {
+    const state = loadState();
+    document.querySelectorAll('.check-item').forEach((item, i) => {
+      if (state[i]) item.classList.add('checked');
+    });
+    updateProgress();
+  });
+</script>
+
+</body>
+</html>
