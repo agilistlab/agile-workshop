@@ -194,6 +194,11 @@
   .callout.amber { border-color: var(--amber); background: rgba(201,122,26,0.07); }
   .callout strong { display: block; margin-bottom: 3px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
 
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--slate); line-height: 1.4; }
+  .legend-item .item-tag { margin: 0; }
+
   /* FOOTER */
   .footer { text-align: center; font-size: 12px; color: var(--slate); margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); }
 
@@ -236,6 +241,20 @@
     <div class="hero-tag">New Product Owner · Scrum Guide 2020 · SAFe 6.0</div>
     <h1>PO Accountability Checklist</h1>
     <div class="hero-sub">Use this checklist to confirm you understand and are actively fulfilling your core accountabilities and responsibilities as a Product Owner. Tick each item when you are consistently doing it — not just aware of it.</div>
+    <div class="legend">
+      <div class="legend-item">
+        <span class="item-tag tag-must">MUST</span>
+        Non-delegable Scrum accountability — you own this outcome, no one else can carry it for you
+      </div>
+      <div class="legend-item">
+        <span class="item-tag tag-event">EVENT</span>
+        Active contribution expected within a specific Scrum event
+      </div>
+      <div class="legend-item">
+        <span class="item-tag tag-safe">SAFe</span>
+        Responsibility specific to the SAFe context — applies at ART level
+      </div>
+    </div>
     <div class="progress-wrap">
       <div class="progress-label">
         <span>Overall progress</span>
